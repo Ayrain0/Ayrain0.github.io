@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+    <meta name="description" content="Call me by your name">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    spring学习简记 |
+    
+    Ayrain&#39;s blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+<main class="content">
+  <section class="outer">
+  
+
+<article id="post-spring学习简记" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      spring学习简记
+    </h1>
+  
+  
+
+
+
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2020/02/19/spring%E5%AD%A6%E4%B9%A0%E7%AE%80%E8%AE%B0/" class="article-date">
+  <time datetime="2020-02-19T04:01:02.000Z" itemprop="datePublished">2020-02-19</time>
+</a>
+        
+      </div>
+    
+
+    
+      
+    <div class="tocbot"></div>
+
+
+
+
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+        <p>[TOC]<br>spring学习简记，包括DI，代理模式，AOP。</p>
+<a id="more"></a>
+<h3 id="简述Spring"><a href="#简述Spring" class="headerlink" title="简述Spring"></a>简述Spring</h3><h4 id="名词简介"><a href="#名词简介" class="headerlink" title="名词简介"></a>名词简介</h4><ul>
+<li><p><strong>控制反转 IOC</strong></p>
+<ul>
+<li>一种<strong>思想</strong>（本来由类控制其所依赖的另一个类的实例创建，现在把创建动作放到Spring框架里了，由框架控制所有类的实例创建）</li>
+</ul>
+</li>
+<li><p><strong>依赖注入 DI(dependency injection）</strong></p>
+<ul>
+<li>实现IOC的<strong>设计模式</strong>（框架创建了类所依赖的对象，然后把这些对象传给（注入）类。）</li>
+</ul>
+</li>
+<li><p><strong>面向切面编程 AOP(aspect oriented programming)</strong></p>
+<ul>
+<li>横向开发，在不修改源代码的情况下，可以给目标类打补丁，让其执行补丁中的代码。</li>
+</ul>
+</li>
+</ul>
+<h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><ul>
+<li><p><strong>一站式：</strong></p>
+</li>
+<li><p>在IOC和AOP的基础上，可以整合各种企业级的开源框架和优秀的第三方类库（自身的有：展现层的SpringMVC和持久层的Spring JDBC</p>
+</li>
+<li><p><strong>降低Java开发复杂性的四条关键策略：</strong></p>
+<ul>
+<li>基于POJO的轻量级和最小侵入性编程</li>
+<li>通过依赖注入和面向接口实现松耦合</li>
+<li>基于切面和惯例进行编程式声明</li>
+<li>通过切面和模版减少样板式代码</li>
+</ul>
+</li>
+</ul>
+<h4 id="模块简介"><a href="#模块简介" class="headerlink" title="模块简介"></a>模块简介</h4><p><strong>test</strong>： </p>
+<p>单元测试模块 </p>
+<p><strong>core container</strong>： </p>
+<p>核心容器（IOC）黑色块是代表这部分的功能由哪些jar包组成。 </p>
+<p><strong>面向切面编程模块</strong>： </p>
+<p>AOP，Aspects。 </p>
+<p><strong>数据访问/集成</strong>： </p>
+<p>JDBC-&gt;数据库操作 </p>
+<p>ORM-&gt;(Object Relation Mapping)对象依赖注入 </p>
+<p>Transactions-&gt; 事务 </p>
+<p><strong>web</strong>: </p>
+<p>有很多jar包，对应图中不同的模块，这些jar包在libs目录下 </p>
+<p>建议是需要哪个模块就导入哪个模块的包 </p>
+<h3 id="DI"><a href="#DI" class="headerlink" title="DI"></a>DI</h3><h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>依赖注入是一种消除类之间依赖关系的设计模式。</p>
+<p>例如，A类要依赖B类，A类不再直接创建B类，而是把这种依赖关系交给配置信息，然后由Spring容器根据配置信息创建、管理bean类。</p>
+<p>依赖注入的技术基础是多态与反射。 </p>
+<p><strong>那么什么是Bean？</strong> </p>
+<p>Bean是Java中基本的代码重用单位，是遵守一定约定的Java类。 </p>
+<p>在Spring中，Bean就是普通的Java类，由Spring IoC容器实例化、组装、管理。 </p>
+<h4 id="Spring注入依赖项（bean）的方法有哪些？"><a href="#Spring注入依赖项（bean）的方法有哪些？" class="headerlink" title="Spring注入依赖项（bean）的方法有哪些？"></a>Spring注入依赖项（bean）的方法有哪些？</h4><p>可分为三大类:</p>
+<ul>
+<li>XML<ul>
+<li>构造器注入</li>
+<li>setter注入</li>
+</ul>
+</li>
+<li>Java配置类</li>
+<li>注释</li>
+</ul>
+<h4 id="XML注入依赖项"><a href="#XML注入依赖项" class="headerlink" title="XML注入依赖项"></a>XML注入依赖项</h4><h5 id="构造器注入依赖实例"><a href="#构造器注入依赖实例" class="headerlink" title="构造器注入依赖实例"></a>构造器注入依赖实例</h5><p>需要注入依赖实例的类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123; </span><br><span class="line"><span class="keyword">private</span> Service mainService; </span><br><span class="line"><span class="keyword">private</span> Service[] services; </span><br><span class="line"><span class="comment">// 注入Service实例 </span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">(Service main)</span></span>&#123; </span><br><span class="line"><span class="keyword">this</span>.mainService = main; </span><br><span class="line">&#125; </span><br><span class="line"><span class="comment">// 注入Service实例数组 </span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">(Service[] services)</span></span>&#123; </span><br><span class="line"><span class="keyword">this</span>.services = services; &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对应的XML配置：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean id=<span class="string">"app"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"App"</span>&gt; </span><br><span class="line">&lt;!-- 构造函数注入单个依赖项 --&gt; </span><br><span class="line">&lt;constructor-arg ref=<span class="string">"logger"</span>/&gt; </span><br><span class="line">&lt;!-- 构造函数注入依赖项数组 --&gt; </span><br><span class="line">&lt;!-- &lt;constructor-arg&gt; </span><br><span class="line">&lt;list&gt; </span><br><span class="line">&lt;ref bean=<span class="string">"login"</span>/&gt; </span><br><span class="line">&lt;ref bean=<span class="string">"publish"</span>/&gt; </span><br><span class="line">&lt;/list&gt; </span><br><span class="line">&lt;/constructor-arg&gt; --&gt; </span><br><span class="line">&lt;/bean&gt; </span><br><span class="line"></span><br><span class="line"><span class="comment">//被注入的对象记得配置bean</span></span><br><span class="line">&lt;bean id=<span class="string">"login"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"..."</span>/&gt; </span><br><span class="line">&lt;bean id=<span class="string">"publish"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"..."</span>/&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="setter注入依赖实例"><a href="#setter注入依赖实例" class="headerlink" title="setter注入依赖实例"></a>setter注入依赖实例</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span></span>&#123;</span><br><span class="line">  </span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setMainService</span><span class="params">(Service mainService)</span> </span>&#123; </span><br><span class="line"><span class="keyword">this</span>.mainService = mainService; </span><br><span class="line">&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean id=<span class="string">"user"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"..."</span>&gt; </span><br><span class="line">&lt;!-- Setter 方法配置 --&gt; </span><br><span class="line">&lt;property name=<span class="string">"mainService"</span> ref=<span class="string">"logger"</span>/&gt; </span><br><span class="line">&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="XML其他配置"><a href="#XML其他配置" class="headerlink" title="XML其他配置"></a>XML其他配置</h5><h6 id="注入属性值"><a href="#注入属性值" class="headerlink" title="注入属性值"></a><strong>注入属性值</strong></h6><ul>
+<li><p>可以注入依赖项，我们当然也可以通过XML文件来注入属性值，后面的注释注入和Java配置类注入也是大同小异。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 通过set方法注入的传统的bean定义 --&gt;</span><br><span class="line">&lt;bean id=<span class="string">"User"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"..."</span>&gt;</span><br><span class="line">	&lt;property name=<span class="string">"p1"</span> value=<span class="string">"v1"</span>/&gt;</span><br><span class="line">	&lt;property name=<span class="string">"p2"</span> value=<span class="string">"v2"</span>/&gt;</span><br><span class="line">	&lt;property name=<span class="string">"login"</span> ref=<span class="string">"..."</span>/&gt;</span><br><span class="line">&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<h6 id="p-c命名空间"><a href="#p-c命名空间" class="headerlink" title="p/c命名空间"></a>p/c命名空间</h6><ul>
+<li>C/P命名空间将<constructor-arg>/<property>元素转换成bean中的一个属性</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 通过set方法注入的使用p命名空间的bean定义 --&gt;</span><br><span class="line">	&lt;bean id=<span class="string">"User"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"..."</span> p:p1=<span class="string">"v1"</span> p:p2=<span class="string">"v2"</span> p:login-ref=<span class="string">"..."</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 使用c命名空间通过构造方法注入的bean定义 / arg123为索引 --&gt;</span><br><span class="line">	&lt;bean id=<span class="string">"User"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"..."</span> c:arg1=<span class="string">"v1"</span> c:arg2=<span class="string">"v2"</span> c:arg3=<span class="string">"..."</span></span><br></pre></td></tr></table></figure>
+
+<p>C命名空间也可以自己选择构造器名</p>
+<h6 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean id=<span class="string">"User"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"..."</span> scope=<span class="string">"singleton"</span>/&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>单例(singleton) </p>
+<p>默认作用域，一个spring容器中只有Bean的一个实例。</p>
+<p> (多线程时可能出现并发的问题)</p>
+</li>
+<li><p>原型(prototype) </p>
+<p>每次获取Bean时生成一个新的实例。 </p>
+</li>
+<li><p>请求(request)</p>
+<p>作用域是单个http请求，单个http请求只有Bean的一个实例。一旦请求完成，bean实例将被销毁。 </p>
+</li>
+<li><p>会话(session) </p>
+</li>
+</ul>
+<p>​       作用域是单个会话，单个会话只有Bean的一个实例。一旦会话结束，bean实例将被销毁。 </p>
+<ul>
+<li><p>全局会话(global-session) </p>
+<p>在Portlet应用程序中使用，每个全局会话只有Bean的一个实例。普通Servlet应用中与会话作用域无区别。 </p>
+</li>
+</ul>
+<h6 id="bean初始化和销毁方法"><a href="#bean初始化和销毁方法" class="headerlink" title="bean初始化和销毁方法"></a>bean初始化和销毁方法</h6><ul>
+<li><p>指定Bean的初始化方法和销毁方法，Spring容器会为该Bean调用这些方法 </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean id="app" class="App" init-method="init" destroy-method="close"&gt;&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<h6 id="XML自动装配"><a href="#XML自动装配" class="headerlink" title="XML自动装配"></a>XML自动装配</h6><ul>
+<li><p>不准确 不建议</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean id =<span class="string">"People"</span> <span class="class"><span class="keyword">class</span> </span>= <span class="string">""</span> autowire = <span class="string">"byName"</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>byName</strong> 为 people类会在上下文中寻找<strong>Set方法</strong>所需要的<strong>类名</strong>，如果XML中有该类的Bean 将自动装配</p>
+<p><strong>byType</strong> 寻找<strong>属性数据类型</strong>相同的，但是要在该属性里唯一。</p>
+<p><strong>constructor</strong> 通过<strong>构造函数参数的数据类型</strong>。匹配构造函数参数的数据类型和依赖bean类型，如果容器中没找到类型匹配的Bean，抛出致命异常。</p>
+</li>
+</ul>
+<h6 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h6><ul>
+<li><p>在总的配置文件中导入其他的配置文件，用于团队开发。 </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="keyword">import</span> resource = <span class="string">"bean1.xml"</span>&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>对象别名</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alias</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<h4 id="注解注入"><a href="#注解注入" class="headerlink" title="注解注入"></a>注解注入</h4><p>使用注解首先要打开组件扫描，启用注解配置</p>
+<p>Xml:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">"com.*"</span>&gt;</span><span class="tag">&lt;/<span class="name">context:component-scan</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><u>注解组册bean:</u></p>
+<p>@Component注解，就会注册Bean，同时设置Bean ID。 </p>
+<p>@Scope(“prototype”) // 设置作用域 </p>
+<p><u>如何使用注解注入依赖</u>？</p>
+<h5 id="使用-Autowired注解注入依赖项"><a href="#使用-Autowired注解注入依赖项" class="headerlink" title="使用@Autowired注解注入依赖项"></a>使用@Autowired注解注入依赖项</h5><p>有三种方法</p>
+<p>构造函数注入 </p>
+<p>Setter注入 </p>
+<p>字段注入 </p>
+<h6 id="构造方法注入"><a href="#构造方法注入" class="headerlink" title="构造方法注入"></a>构造方法注入</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> </span>&#123; </span><br><span class="line"><span class="keyword">private</span> Service mainService; <span class="comment">//Service接口</span></span><br><span class="line"><span class="keyword">private</span> Service[] services; </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">App</span><span class="params">()</span></span>&#123; </span><br><span class="line">&#125; </span><br><span class="line"><span class="comment">// 构造方法注入单个实例，若Service接口有多个实现类，用@Qualifier指定</span></span><br><span class="line"><span class="meta">@Autowired</span> </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">(@Qualifier(<span class="string">"login"</span>)</span> Service main)</span>&#123; </span><br><span class="line"><span class="keyword">this</span>.setMainService(main); </span><br><span class="line">&#125; </span><br><span class="line"><span class="comment">// 构造方法注入多个，注入该接口全部实现类</span></span><br><span class="line"><span class="meta">@Autowired</span> </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">(Service[] services)</span></span>&#123; </span><br><span class="line"><span class="keyword">this</span>.setServices(services); </span><br><span class="line">&#125; </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setMainService</span><span class="params">(Service mainService)</span> </span>&#123; </span><br><span class="line"><span class="keyword">this</span>.mainService = mainService; </span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setServices</span><span class="params">(Service[] services)</span> </span>&#123; </span><br><span class="line"><span class="keyword">this</span>.services = services; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h6 id="setter方法注入"><a href="#setter方法注入" class="headerlink" title="setter方法注入"></a>setter方法注入</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//...</span></span><br><span class="line"><span class="keyword">private</span> Service mainService; </span><br><span class="line"><span class="meta">@Autowired</span> </span><br><span class="line"><span class="meta">@Qualifier</span>(<span class="string">"login"</span>) </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setMainService</span><span class="params">(Service mainService)</span> </span>&#123; </span><br><span class="line"><span class="keyword">this</span>.mainService = mainService; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但<u>其实可以不用Set方法或者构造方法， 仅有@Autowired这个注解就行了。</u></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span> </span><br><span class="line"><span class="meta">@Qualifier</span>(<span class="string">"login"</span>) </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">anyMethod</span><span class="params">(Service mainService)</span> </span>&#123; </span><br><span class="line"><span class="keyword">this</span>.mainService = mainService; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h6 id="字段注入"><a href="#字段注入" class="headerlink" title="字段注入"></a>字段注入</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span> </span><br><span class="line"><span class="meta">@Qualifier</span>(<span class="string">"login"</span>) </span><br><span class="line"><span class="keyword">private</span> Service mainService;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="注解其他利用"><a href="#注解其他利用" class="headerlink" title="注解其他利用"></a>注解其他利用</h5><h6 id="Value注入属性值"><a href="#Value注入属性值" class="headerlink" title="@Value注入属性值"></a>@Value注入属性值</h6><h5 id="常用注解"><a href="#常用注解" class="headerlink" title="常用注解"></a>常用注解</h5><p>@Component注解，就会注册Bean，同时设置Bean ID。 </p>
+<p>@Scope(“prototype”) // 设置作用域 </p>
+<p>@Nullable 可为空 </p>
+<p>@PostConstruct – 此注解指定初始化回调方法 </p>
+<p>@PreDestroy – 此注解指定销毁回调方法 </p>
+<p><strong>回调方法：</strong></p>
+<p>Bean在创建时，需要执行一些资源（数据库、套接字、文件）申请等初始化工作，可以在Bean的初始化回调方法中处理，此方法由Spring容器调用。 </p>
+<p>同样Bean在销毁时，需要执行一些资源（数据库、套接字、文件）申请等销毁工作，可以在Bean的销毁回调方法中处理，此方法由Spring容器调用。 </p>
+<p> @Resource  java自带注解 也可以自动注入依赖 @Resource (name = “”) </p>
+<h4 id="Java配置类注入"><a href="#Java配置类注入" class="headerlink" title="Java配置类注入"></a>Java配置类注入</h4><p>UserConfig：</p>
+<p>用此类获得bean</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span><span class="comment">//也会被注册到Spring容器中，他也是一个组件，表明这是个bean的配置类，代替了XML。</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span><span class="comment">//@Bean(initMethod = "init", destroyMethod = "close" ) // 指定初始化回调，销毁回调 </span></span><br><span class="line">  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> ConfigUser <span class="title">getConfigUser</span><span class="params">()</span></span>&#123;<span class="comment">//方法名get之后=XML配置文件中的ID</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ConfigUser();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//或者可以不用get</span></span><br><span class="line"><span class="comment">/**    public Login login() &#123; // Bean ID = login </span></span><br><span class="line"><span class="comment">		return new Login(); // 返回Login Bean </span></span><br><span class="line"><span class="comment">		&#125; **/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Test：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        ApplicationContext context = <span class="keyword">new</span> AnnotationConfigApplicationContext(<span class="string">"ConfigUser.class"</span>);<span class="comment">//读取定义的配置类</span></span><br><span class="line">        ConfigUser getConfigUser1 = (ConfigUser) context.getBean(<span class="string">"getConfigUser"</span>);<span class="comment">//方法名</span></span><br><span class="line">        System.out.println(getConfigUser1.getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="AOP"><a href="#AOP" class="headerlink" title="AOP"></a>AOP</h3><h4 id="代理模式（SpringAOP-MVC底层实现）"><a href="#代理模式（SpringAOP-MVC底层实现）" class="headerlink" title="代理模式（SpringAOP/MVC底层实现）"></a>代理模式（SpringAOP/MVC底层实现）</h4><h5 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h5><p>抽象角色：使用接口或者抽象类解决 代表一类业务<br>真实角色：被代理的角色<br>代理角色：代理真实角色（用来添加附属操作）<br>客户：访问代理对象</p>
+<p>代理模式应该看不到目标对象，真实角色要写在代理角色里面，客户调用代理时同时创建代理角色和真实角色。</p>
+<h5 id="好处"><a href="#好处" class="headerlink" title="好处"></a>好处</h5><p>1:使真实角色工作更纯粹，无公共业务 </p>
+<p>2:公共业务交给代理，公共业务可以进行分工 </p>
+<p>2:公共业务发生拓展时，便于集中管理 </p>
+<h5 id="静态代理"><a href="#静态代理" class="headerlink" title="静态代理"></a>静态代理</h5><ul>
+<li>结构![image-20200212113803195](/Users/ayrain/Library/Application Support/typora-user-images/image-20200212113803195.png)</li>
+</ul>
+<ul>
+<li>Host1:<strong>真实角色</strong>![image-20200212113906683](/Users/ayrain/Library/Application Support/typora-user-images/image-20200212113906683.png)</li>
+</ul>
+<ul>
+<li>Proxy:<strong>代理角色</strong>(我们不能动态的知道每个真实角色的方法，所以这里写死了，一个代理角色代理一个真实角色)![image-20200212113918560](/Users/ayrain/Library/Application Support/typora-user-images/image-20200212113918560.png)</li>
+</ul>
+<ul>
+<li><p><strong>客户</strong>:（将host1带入Proxy）</p>
+<p>![image-20200212114008478](/Users/ayrain/Library/Application Support/typora-user-images/image-20200212114008478.png)</p>
+</li>
+</ul>
+<p><u>静态代理的设计理念里</u></p>
+<p><u>一个真实角色就要产生一个代理角色，开发效率低。</u></p>
+<p><u>我们可用动态代理解决这个问题。</u></p>
+<h5 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h5><p>反射的时候<strong>动态加载</strong>一些类</p>
+<p>1:动代理的代理类是动态加载的，不是我们直接写好的。<br>2:一个动态代理类代理的是一个接口，一般就是一类业务。<br>3:一个动态代理类可以代理多个实现了同一接口的类。</p>
+<ul>
+<li><p>client.class</p>
+<p>![image-20200212120102295](/Users/ayrain/Library/Application Support/typora-user-images/image-20200212120102295.png)</p>
+</li>
+</ul>
+<ul>
+<li><p><strong>proxy</strong></p>
+<p>![image-20200212120219527](/Users/ayrain/Library/Application Support/typora-user-images/image-20200212120219527.png)</p>
+</li>
+</ul>
+<p><strong><u>还能再改进吗？</strong></u> </p>
+<p>在上述proxy的setRent方法中，我们可以看出Rent这个接口时被写死了的，较动态代理，我们的确可以动态代理同一接口的真实角色类。但是 我们能仅用一个代理角色，实现<strong>多个接口的代理</strong>吗？ </p>
+<ul>
+<li><p>将proxy中的代理对象改为Object类型：</p>
+<p>![image-20200212120300938](/Users/ayrain/Library/Application Support/typora-user-images/image-20200212120300938.png)</p>
+</li>
+<li><p>client：</p>
+<p>![image-20200212120333799](/Users/ayrain/Library/Application Support/typora-user-images/image-20200212120333799.png)</p>
+</li>
+</ul>
+<p><strong>tips：</strong></p>
+<p>一些动态代理 </p>
+<p>基于接口的动态代理 </p>
+<p>JDK动态代理（Spring默认） </p>
+<p>基于类的动态代理 </p>
+<p>Cglib </p>
+<p>ava字节码的动态代理 </p>
+<p>javassist </p>
+<p><u>了解了AOP的实现机制-&gt;动态代理。那接下来就看看AOP的具体用法吧</u></p>
+<h4 id="AOP实现"><a href="#AOP实现" class="headerlink" title="AOP实现"></a>AOP实现</h4><h5 id="概念及其名词解释"><a href="#概念及其名词解释" class="headerlink" title="概念及其名词解释"></a>概念及其名词解释</h5><ul>
+<li><p>大致逻辑：![image-20200212120539478](/Users/ayrain/Library/Application Support/typora-user-images/image-20200212120539478.png)</p>
+</li>
+<li><p>![image-20200212120731499](/Users/ayrain/Library/Application Support/typora-user-images/image-20200212120731499.png)</p>
+</li>
+</ul>
+<p><strong>一些名词</strong><br>横切关注点：（横切：加上通用的功能，例如日志缓存。 关注点：业务）<br>切面：一个类，被模块化的特殊对象<br>通知：切面完成的工作，类中的方法，例如日志中的记录方法<br>目标：被通知的对象<br>代理：<br>切入点：切面通知执行的地方<br>连接点：joinpoint</p>
+<p>同时提供了声明式业务，让允许用<strong>户自定义切面</strong></p>
+<ul>
+<li>实现自定义切面有三种方法：</li>
+</ul>
+<p>用Spring原声API接口实现切面</p>
+<p>用自定义类实现（自定义切面）</p>
+<p>用注解实现</p>
+<p>下面的实例，以UserServiceImp-log作为原有业务</p>
+<p>![image-20200213103926637](/Users/ayrain/Library/Application Support/typora-user-images/image-20200213103926637.png)</p>
+<p>![image-20200213105024583](/Users/ayrain/Library/Application Support/typora-user-images/image-20200213105024583.png)</p>
+<h5 id="用Spring原声API接口实现"><a href="#用Spring原声API接口实现" class="headerlink" title="用Spring原声API接口实现"></a>用Spring原声API接口实现</h5><ul>
+<li><p>XML配置![image-20200213104030362](/Users/ayrain/Library/Application Support/typora-user-images/image-20200213104030362.png)</p>
+</li>
+<li><p>test</p>
+<p>![image-20200213104251057](/Users/ayrain/Library/Application Support/typora-user-images/image-20200213104251057.png)</p>
+</li>
+</ul>
+<h5 id="用自定义类实现动态代理（自定义切面）"><a href="#用自定义类实现动态代理（自定义切面）" class="headerlink" title="用自定义类实现动态代理（自定义切面）"></a>用自定义类实现动态代理（自定义切面）</h5><ul>
+<li><p>自定义类</p>
+<p>![image-20200213104519538](/Users/ayrain/Library/Application Support/typora-user-images/image-20200213104519538.png)</p>
+<p>![image-20200213104325255](/Users/ayrain/Library/Application Support/typora-user-images/image-20200213104325255.png)</p>
+</li>
+</ul>
+<ul>
+<li>![image-20200213104342671](/Users/ayrain/Library/Application Support/typora-user-images/image-20200213104342671.png)</li>
+</ul>
+<ul>
+<li>![image-20200213104451784](/Users/ayrain/Library/Application Support/typora-user-images/image-20200213104451784.png)</li>
+</ul>
+<h5 id="用注解实现"><a href="#用注解实现" class="headerlink" title="用注解实现"></a>用注解实现</h5><ul>
+<li>![image-20200213104951819](/Users/ayrain/Library/Application Support/typora-user-images/image-20200213104951819.png)</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/02/19/spring%E5%AD%A6%E4%B9%A0%E7%AE%80%E8%AE%B0/" data-id="ck6uks0l10000sxwd7oem8p57"
+         class="article-share-link">Share</a>
+      
+    </footer>
+
+  </div>
+
+  
+    
+  <nav class="article-nav">
+    
+      <a href="/2020/02/19/Test/" class="article-nav-link">
+        <strong class="article-nav-caption">Newer</strong>
+        <div class="article-nav-title">
+          
+            Test
+          
+        </div>
+      </a>
+    
+    
+  </nav>
+
+
+  
+
+  
+    
+  
+
+</article>
+
+
+
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2020 Ayrain&#39;s blog</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean" target="_blank" rel="noopener">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="Ayrain&#39;s blog"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">Home</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">Archives</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">Gallery</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">About</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        Search
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+  
+<script src="/js/tocbot.min.js"></script>
+
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+
+<script src="/js/ocean.js"></script>
+
+
+</body>
+</html>
