@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+    <meta name="description" content="Call me by your name">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    巅峰极客密码学Wp |
+    
+    Ayrain&#39;s blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+<main class="content">
+  <section class="outer">
+  
+
+<article id="post-巅峰极客密码学Wp" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      巅峰极客密码学Wp
+    </h1>
+  
+  
+
+
+
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2020/02/22/%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2%E5%AF%86%E7%A0%81%E5%AD%A6Wp/" class="article-date">
+  <time datetime="2020-02-22T09:22:04.000Z" itemprop="datePublished">2020-02-22</time>
+</a>
+        
+      </div>
+    
+
+    
+      
+
+
+
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+        <p>题目详见巅峰极客比赛</p>
+<a id="more"></a>
+<p>已知：c1 c2 c3  p2 p3 m1 用到了p2 c2 c3</p>
+<p>除以一个数等于乘上这个数的倒数，在除法取余的情况下，就是乘上这个数的逆元</p>
+<p>除以一个数再取模等同于乘以这个数的逆元再取模<br>什么意思? 设 𝑖𝑛𝑣[𝑏] 是 𝑏 的逆元, 那么 (𝑎𝑏)%𝑝=(𝑎∗𝑖𝑛𝑣[𝑏])%𝑝</p>
+<p>(a<em>b)%p = (a%p</em>b%p)%p</p>
+<p>改一下看的头痛的cococo<br>from Crypto.Util.number import *<br>from Crypto.Random.random import *<br>#from flag import flag<br>p1 = getStrongPrime(1024)<br>p2 = getStrongPrime(1024)<br>p3 = getStrongPrime(1024)</p>
+<p>def gcd(a, b):<br>    while b: a, b = b, a % b<br>    return a</p>
+<p>def pow(x, y, z):<br>    res = 1<br>    while y != 0:<br>        if (y &amp; 1) == 1:<br>            res = (res * x) % z<br>        y &gt;&gt;= 1<br>        x = (x * x) % z<br>    return res</p>
+<p>powr = pow(p3, p1, p2)</p>
+<p>while True:<br>    f = randint(1, 2 ** 512)<br>    if gcd(f, p2 - 1) == 1:<br>        break</p>
+<p>mm = bytes_to_long(“CoCoCoCoCoCoCoCoCoCoCoCoCoCoCoCoCoCoCoCoCoCoCoCo”)<br>aa = pow(p3, f, p2)<br>bb = (mm * pow(powr, f, p2)) % p2<br>nn = bytes_to_long(flag)<br>cc = (nn * pow(powr, f, p2)) % p2</p>
+<p>with open(‘cipher.txt’, ‘w’) as f:<br>    f.write(“aa = “ + str(aa) + “\n”)<br>    f.write(“p3 = “ + str(p3) + “\n”)<br>    f.write(“bb = “ + str(bb) + “\n”)<br>    f.write(“p2 = “ + str(p2) + “\n”)<br>    f.write(“cc = “ + str(cc) + “\n”)</p>
+<p>由题</p>
+<p>除以一个数等于乘上这个数的倒数，在除法取余的情况下，就是乘上这个数的逆元。<br>再用crypto库函数inverse求逆元即可</p>
+<p>p2 = CoCo<br>bb = CoCoCoCoCoCoCoCoCoCoCo<br>cc = CoCoCoCoCoCoCoCoCoCoCoCo<br>nn = bytes_to_long(flag)</p>
+<p>exp.py:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">mm = bytes_to_long(<span class="string">"CoCoCoCoCoCoCoCoCoCoCoCoCoCoCoCoCoCoCoCoCoCoCoCo"</span>)</span><br><span class="line">p2 = <span class="number">133694097868622092961596455982173439482901807533684907590429464542321832157724052684517499871073826858762297729480414306161113412741865099163152505447334863097434932940729269605986418443532208942119505043634990271717198694190123478547503837269948205839761848366722796091382894026537012764323367229104988051357</span></span><br><span class="line">bb = <span class="number">120085813769601903784459580746767828105716607333492124010803514777437504109331448009890874939858984666641139819379969714070220763093188551966830630639308142299719976258227450642141963425187429636880593480951498406380068747404115889400485463839002674872020074254287490910994729347868122864760194135575038263365</span></span><br><span class="line">cc = <span class="number">53913320010474614353771348695262553935361078517742942745359182152882204780769206005474818637010209561420480280523029509375286538886061621596249179407728697515399046471231513536340506648832858695583318765423245104561512700887050932667507358898646356134386213016528778706360147066411877832628237361011621917972</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">print(long_to_bytes(cc * inverse(bb, p2) * mm % p2))</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/02/22/%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2%E5%AF%86%E7%A0%81%E5%AD%A6Wp/" data-id="ck6xedk8d000094wdasonc8ao"
+         class="article-share-link">Share</a>
+      
+    </footer>
+
+  </div>
+
+  
+    
+  <nav class="article-nav">
+    
+    
+      <a href="/2020/02/19/%E7%BA%BF%E4%B8%8B%E5%87%86%E5%A4%87/" class="article-nav-link">
+        <strong class="article-nav-caption">Older</strong>
+        <div class="article-nav-title">线下准备</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+    
+  
+
+</article>
+
+
+
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2020 Ayrain&#39;s blog</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean" target="_blank" rel="noopener">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="Ayrain&#39;s blog"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">Home</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">Archives</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">Gallery</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">About</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        Search
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+  
+<script src="/js/tocbot.min.js"></script>
+
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+
+<script src="/js/ocean.js"></script>
+
+
+</body>
+</html>

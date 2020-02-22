@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+    <meta name="description" content="Call me by your name">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    线下准备 |
+    
+    Ayrain&#39;s blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+<main class="content">
+  <section class="outer">
+  
+
+<article id="post-线下准备" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      线下准备
+    </h1>
+  
+  
+
+
+
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2020/02/19/%E7%BA%BF%E4%B8%8B%E5%87%86%E5%A4%87/" class="article-date">
+  <time datetime="2020-02-19T09:25:50.000Z" itemprop="datePublished">2020-02-19</time>
+</a>
+        
+      </div>
+    
+
+    
+      
+
+
+
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+        <p>关于线下的准备</p>
+<a id="more"></a>
+<p>D盾<br>菜刀<br>xshell</p>
+<p>批量提交flag脚本<br>通防<br>卡check机时间下服务</p>
+<p>修改ssh密码：</p>
+<ul>
+<li>Passwd-回车-输入旧密码-new<br>修改数据库密码：</li>
+<li>set password for mycms@localhost = password(‘123’);</li>
+<li>mysql&gt; set password for 用户名@localhost = password(‘新密码’);</li>
+<li>mysqladmin -u用户名 -p旧密码 password 新密码</li>
+</ul>
+<p>备份：</p>
+<ul>
+<li>Find / -name index.php</li>
+<li>tar -cvf /tmp/test.tar ./www/*</li>
+<li>tar -cvf /home/option.tar ./www/*</li>
+</ul>
+<p>备份数据库：</p>
+<ul>
+<li><p>找到配置文件 得到密码：find /var/www/html -path ‘<em>config</em>’</p>
+</li>
+<li><p>找到mysqldump链接:  find / -path ‘<em>mysqldump</em>‘</p>
+</li>
+<li><p>备份：/usr/local/mysql/bin/mysqldump -uroot -pB7262a36a26c –all-databases &gt;/tmp/all.sql</p>
+</li>
+<li><p>还原：mysql -u root -p [dbnams] &lt; /tmp/all.sql</p>
+</li>
+<li><p>在mysql命令行还原：source ~/db.sql</p>
+</li>
+<li><p>mysql dump -uroot -proot –all-databases &gt;/tmp/all.sql</p>
+</li>
+<li><p>mysql -uroot -p</p>
+</li>
+<li><p>mysqldump -u root -p -all-database &gt; alldb.sql</p>
+</li>
+</ul>
+<p>连接ssh：</p>
+<ul>
+<li>ssh 用户名@ip或主机名</li>
+<li>ssh –p 23 ctf@ip</li>
+<li>获取信息：</li>
+<li>id    用于显示用户的ID，以及所属群组的ID</li>
+<li>root一般是0</li>
+<li>查看进程（中间件）：ps  -aux</li>
+<li>确定对外端口：nmap -sV –open ip</li>
+<li>发现攻击目标：Nmap –sP 10.20.124.0/24<br>备份/解压：</li>
+<li>/tmp /home/xxx</li>
+<li>zip –r  /tmp/two.zip  ./*</li>
+<li>unzip xxx.zip –d  解压目录 </li>
+<li>tar -cvf /tmp/test.tar ./www/*     打包目录有www包</li>
+<li>tar –xvf /tmp/test.tar –C /</li>
+</ul>
+<p>抓取流量包：</p>
+<ul>
+<li>sudo tcpdump -s 0 -w flow.pcap port 80</li>
+</ul>
+<p>查找后门：</p>
+<ul>
+<li>find . -name ‘*.php’ | xargs grep -n ‘eval(‘</li>
+<li>find . -name ‘*.php’ | xargs grep -n ‘assert(‘</li>
+<li>find . -name ‘*.php’ | xargs grep -n ‘system(‘</li>
+<li>find . -name ‘*.php’ | xargs grep -n ‘func’</li>
+<li>find . -name ‘*.php’ | xargs grep -n ‘]($_GET[‘</li>
+<li>find . -name ‘*.php’ | xargs grep -n ‘`’</li>
+<li>find . -name ‘*.js’ | xargs grep -n ‘function(req, res)’</li>
+</ul>
+<p>查看最近被修改的五个文件 find . -type f | xargs ls -lt | head -5</p>
+<p>find -name *.c -or -name *.h</p>
+<p>find / -mmin -5 　　# 查找在系统中最后5分钟里修改过的文件(modify time)<br>find . -name ‘srm*’ 　　#表示当前目录下查找文件名开头是字符串‘srm’的文件</p>
+<p>find . -name ‘<em>.</em>‘ | xargs grep -n ‘FLAG{‘<br>find . -name ‘<em>.</em>‘ | xargs grep -n ‘flag{‘</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/02/19/%E7%BA%BF%E4%B8%8B%E5%87%86%E5%A4%87/" data-id="ck6xedk8j000194wd6e2k2sik"
+         class="article-share-link">Share</a>
+      
+    </footer>
+
+  </div>
+
+  
+    
+  <nav class="article-nav">
+    
+      <a href="/2020/02/22/%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2%E5%AF%86%E7%A0%81%E5%AD%A6Wp/" class="article-nav-link">
+        <strong class="article-nav-caption">Newer</strong>
+        <div class="article-nav-title">
+          
+            巅峰极客密码学Wp
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2020/02/19/Ld-preload/" class="article-nav-link">
+        <strong class="article-nav-caption">Older</strong>
+        <div class="article-nav-title">Ld_preload</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+    
+  
+
+</article>
+
+
+
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2020 Ayrain&#39;s blog</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean" target="_blank" rel="noopener">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="Ayrain&#39;s blog"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">Home</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">Archives</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">Gallery</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">About</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        Search
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+  
+<script src="/js/tocbot.min.js"></script>
+
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+
+<script src="/js/ocean.js"></script>
+
+
+</body>
+</html>
