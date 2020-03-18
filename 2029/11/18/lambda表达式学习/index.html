@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+    <meta name="description" content="Call me by your name">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    lambda表达式学习 |
+    
+    Ayrain&#39;s blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+<main class="content">
+  <section class="outer">
+  
+
+<article id="post-lambda表达式学习" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      lambda表达式学习
+    </h1>
+  
+  
+
+
+
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2029/11/18/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%AD%A6%E4%B9%A0/" class="article-date">
+  <time datetime="2029-11-18T03:52:27.000Z" itemprop="datePublished">2029-11-18</time>
+</a>
+        
+      </div>
+    
+
+    
+      
+    <div class="tocbot"></div>
+
+
+
+
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+        <p>[toc]<br>lambda表达式的详细学习笔记</p>
+<a id="more"></a>
+
+
+<h3 id="lambda表达式"><a href="#lambda表达式" class="headerlink" title="lambda表达式"></a>lambda表达式</h3><h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><h5 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h5><p>(parameters) -&gt; expression</p>
+<p>or</p>
+<p> (parameters) -&gt;{ statements; }</p>
+<p> <strong>():</strong>接口中抽象方法的参数列表，没有参数，就空着；有参数就写出参数，多个参数使用逗号分隔。</p>
+<p> <strong>-&gt;：</strong>传递的意思，把参数传递给方法体{}。</p>
+<p> <strong>{}：</strong>重写接口的抽象方法。</p>
+<h5 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h5><p>避免匿名内部类定义过多</p>
+<p>简化代码</p>
+<h5 id="函数式接口"><a href="#函数式接口" class="headerlink" title="函数式接口"></a>函数式接口</h5><p>函数式接口又称SAM接口，是lambda表达式的关键所在。</p>
+<p>对于函数式接口，我们就能用lambda表达式来创建该接口的对象。</p>
+<p><strong>定义：</strong></p>
+<p>任何接口，如果只包含唯一一个抽象方法，那么该接口为一个函数式接口</p>
+<ul>
+<li>由@FunctionalInterface注解标注</li>
+</ul>
+<ul>
+<li>接口有且仅有一个抽象方法</li>
+<li>允许定义静态方法</li>
+<li>允许定义默认方法</li>
+<li>允许java.lang.Object中的public方法</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">TestInterface</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 抽象方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sub</span><span class="params">()</span></span>;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// java.lang.Object中的public方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object var1)</span></span>;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 默认方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">default</span> <span class="keyword">void</span> <span class="title">defaultMethod</span><span class="params">()</span></span>&#123;   </span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 静态方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">staticMethod</span><span class="params">()</span></span>&#123; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>j d k中的函数式接口:</strong></p>
+<p>java.lang.Runnable,</p>
+<p>java.awt.event.ActionListener,</p>
+<p>java.util.Comparator,</p>
+<p>java.util.concurrent.Callable</p>
+<p>java.util.function包下的接口，如Consumer、Predicate、Supplier等</p>
+<h4 id="常用实例"><a href="#常用实例" class="headerlink" title="常用实例"></a>常用实例</h4><p>对于函数式接口，我们就能用lambda表达式来创建该接口的对象.</p>
+<p>由下可知，我们可以<u>取代</u>大部分的<u>匿名内部类</u></p>
+<h5 id="基本语法延伸"><a href="#基本语法延伸" class="headerlink" title="基本语法延伸"></a>基本语法延伸</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> Lambda;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Lambda</span> </span>&#123;</span><br><span class="line">    <span class="comment">//static Object Dogs = null;</span></span><br><span class="line">    <span class="comment">//静态内部类</span></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Dog</span> <span class="keyword">implements</span> <span class="title">Animal</span></span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"bone"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> num = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        Animal cat = <span class="keyword">new</span> Cat();</span><br><span class="line">        cat.eat();</span><br><span class="line">        Animal dog = <span class="keyword">new</span> Dog();</span><br><span class="line">        dog.eat();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//局部内部类</span></span><br><span class="line">        <span class="class"><span class="keyword">class</span> <span class="title">Sheep</span> <span class="keyword">implements</span> <span class="title">Animal</span></span>&#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                System.out.println(<span class="string">"grass"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        Animal sheep = <span class="keyword">new</span> Sheep();</span><br><span class="line">        sheep.eat();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//匿名局部类</span></span><br><span class="line">        Animal Tiger = <span class="keyword">new</span> Animal() &#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                System.out.println(<span class="string">"all others"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        Tiger.eat();</span><br><span class="line">      </span><br><span class="line"></span><br><span class="line">        <span class="comment">//lambda</span></span><br><span class="line">        Animal TigerTwo = ()-&gt;&#123;</span><br><span class="line">            System.out.println(<span class="string">"all others -2"</span>);</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        TigerTwo.eat();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//lambda 有参数</span></span><br><span class="line">        Bugs fly = (<span class="keyword">int</span> a)-&gt;&#123;</span><br><span class="line">            System.out.println(<span class="string">"fly"</span>+a);</span><br><span class="line">        &#125;;</span><br><span class="line">        fly.move(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//lambda 简化参数类型</span></span><br><span class="line">        Bugs fly2 = (a)-&gt;&#123;</span><br><span class="line">            System.out.println(<span class="string">"fly"</span>+a);</span><br><span class="line">        &#125;;</span><br><span class="line">        fly2.move(<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//lambda 只有一个参数时去掉括号</span></span><br><span class="line">        Bugs fly3 = a-&gt;&#123;</span><br><span class="line">            System.out.println(<span class="string">"fly"</span>+a);</span><br><span class="line">        &#125;;</span><br><span class="line">        fly3.move(<span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//lambda 方法体只有一行语法时 去掉代码块符</span></span><br><span class="line">        Bugs fly4 = a-&gt; System.out.println(<span class="string">"fly"</span>+a);</span><br><span class="line">        fly4.move(<span class="number">4</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//num为外层局部变量</span></span><br><span class="line">        Converter&lt;Integer, String&gt; s = (param,param2) -&gt; System.out.println(String.valueOf(param + param2+ num));</span><br><span class="line">        s.convert(<span class="number">2</span>,<span class="number">3</span>); <span class="comment">// 输出结果为6</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Animal</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Bugs</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">move</span><span class="params">(<span class="keyword">int</span> a)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Converter</span>&lt;<span class="title">T1</span>, <span class="title">T2</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">convert</span><span class="params">(<span class="keyword">int</span> i,<span class="keyword">int</span> y)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> <span class="keyword">implements</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"fish"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="行为参数化"><a href="#行为参数化" class="headerlink" title="行为参数化"></a>行为参数化</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Calculator cal = (a,b)-&gt;&#123;</span><br><span class="line">    System.out.println(<span class="string">"return"</span>);</span><br><span class="line">    <span class="keyword">return</span> a+b;</span><br><span class="line">&#125;;</span><br><span class="line">System.out.println(<span class="string">"return:"</span>+cal.calc(<span class="number">2</span>,<span class="number">3</span>));</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Calculator</span> </span>&#123;</span><br><span class="line">    <span class="comment">//定义一个计算两个int整数和的方法并返回结果</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">calc</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="lambda表达式-引用其他方法"><a href="#lambda表达式-引用其他方法" class="headerlink" title="lambda表达式 引用其他方法"></a>lambda表达式 引用其他方法</h5><p><u>有时候我们不是必须要自己重写某个匿名内部类的方法，我们可以可以利用 lambda表达式的接口快速指向一个已经被实现的方法。</u></p>
+<p>方法归属者::方法名 </p>
+<p>静态方法的归属者为类名</p>
+<p>普通方法归属者为对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">main....       </span><br><span class="line">				<span class="comment">//引用方法 静态方法时 类名::方法</span></span><br><span class="line">        Animal TigerFour = Other::otherMdStatic;</span><br><span class="line">        TigerFour.eat();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//引用方法 普通方法时 对象::方法</span></span><br><span class="line">        Other other = <span class="keyword">new</span> Other();</span><br><span class="line">        Animal TigerFive = other::otherMd;</span><br><span class="line">        TigerFive.eat();</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Other</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">otherMdStatic</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"引用Other类的otherMdStatic方法"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">otherMd</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"引用Other类的otherMd方法"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当然</p>
+<p>参数数量，类型，返回值类型都要与接口中定义的一致  </p>
+<p>#####lambda表达式简写线程创建</p>
+<p><u>以往的线程创建都是匿名类重写run方法</u></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">System.out.println(<span class="string">"多线程"</span>);</span><br><span class="line">&#125;</span><br><span class="line">&#125;).start();</span><br></pre></td></tr></table></figure>
+
+<p><u>这里就能用lambda表达式来简化。</u></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> Thread(() ‐&gt; System.out.println(<span class="string">"多线程"</span>)).start();</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Thread t = <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">    System.out.println(<span class="number">2</span> + <span class="string">":"</span> + i);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line">t.start();</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="lambda操作集合"><a href="#lambda操作集合" class="headerlink" title="lambda操作集合"></a>lambda操作集合</h5><h6 id="遍历"><a href="#遍历" class="headerlink" title="遍历"></a>遍历</h6><p>forEach方法：用于迭代集合或流</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">forEach</span><span class="params">(Consumer&lt;? <span class="keyword">super</span> E&gt; action)</span></span></span><br></pre></td></tr></table></figure>
+
+<p>jdk自带函数式接口Consumer：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Consumer</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">accept</span><span class="params">(T t)</span></span>;</span><br><span class="line">    <span class="comment">//....</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">   ArrayList&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">   Collections.addAll(list, <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);</span><br><span class="line">   <span class="comment">//遍历数字</span></span><br><span class="line">   list.forEach(System.out::println);</span><br><span class="line"><span class="comment">//打印2的倍数</span></span><br><span class="line">   list.forEach(element -&gt; &#123;</span><br><span class="line">     <span class="keyword">if</span> (element % <span class="number">2</span> == <span class="number">0</span>) &#123;</span><br><span class="line">       System.out.println(element);</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;);</span><br></pre></td></tr></table></figure>
+
+
+
+<h6 id="map-stream"><a href="#map-stream" class="headerlink" title="map+stream"></a>map+stream</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//获得长度</span></span><br><span class="line">items.stream()</span><br><span class="line">        .map(element -&gt; element.length())</span><br><span class="line">        .forEach(count -&gt; System.out.println(<span class="string">"长度为："</span>+ count));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//引用转大写方法</span></span><br><span class="line">items.stream()</span><br><span class="line">        .map(String::toUpperCase)</span><br><span class="line">        .forEach(element -&gt; System.out.println(element));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//filter过后的stream流，再调用stream的collect将stream实例变成list实例</span></span><br><span class="line"><span class="keyword">final</span> List&lt;String&gt; newList = items.stream()</span><br><span class="line">        .filter(element -&gt; element.startsWith(<span class="string">"M"</span>))</span><br><span class="line">        .collect(Collectors.toList());</span><br><span class="line"></span><br><span class="line">newList.forEach(System.out::println);</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="重用"><a href="#重用" class="headerlink" title="重用"></a>重用</h5><p>Lambda表达式也可以保存到一个变量中</p>
+<p>因为lambda表达式符合Predicate接口类型，所以可以这样声明：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//将lambda表达式存入变量 startWithA</span></span><br><span class="line"><span class="keyword">final</span> Predicate&lt;String&gt; startsWithA = element -&gt; element.startsWith(<span class="string">"A"</span>);</span><br><span class="line"><span class="keyword">final</span> Predicate&lt;String&gt; startsWithR = element -&gt; element.startsWith(<span class="string">"R"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//lambda表达式变量传入filter</span></span><br><span class="line"><span class="keyword">final</span> <span class="keyword">long</span> CountStartWithA = items.stream().filter(startsWithA).count();</span><br><span class="line"><span class="keyword">final</span> <span class="keyword">long</span> CountStartWithR = items.stream().filter(startsWithR).count();</span><br><span class="line"></span><br><span class="line">System.out.println(CountStartWithA);</span><br></pre></td></tr></table></figure>
+
+<p>有了这个前提，我们就能重用lambda表达式而不用每次都复写大致相同代码。</p>
+<p><u>如何动态的使用lambda表达式而不用每次都要声明一个呢？</u></p>
+<p>我们可以使用高级函数，返回一个lambda表达式</p>
+<p>这样来动态生成Lambda表达式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Predicate&lt;String&gt; <span class="title">startsWith</span><span class="params">(<span class="keyword">final</span> String letter)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> name -&gt; name.startsWith(letter);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="keyword">long</span> countStartWithA2 = items.stream().filter(startsWith(<span class="string">"A"</span>)).count();</span><br><span class="line"><span class="keyword">final</span> <span class="keyword">long</span> countStartWithR2 = items.stream().filter(startsWith(<span class="string">"R"</span>)).count();</span><br><span class="line">System.out.println(countStartWithR2);</span><br></pre></td></tr></table></figure>
+
+
+
+<p><u><strong>缩小作用域：</strong></u></p>
+<p>改static为final</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> Function&lt;String, Predicate&lt;String&gt;&gt; startsWith2 = letter -&gt; name -&gt; name.startsWith(letter);</span><br></pre></td></tr></table></figure>
+
+
+
+<p>使用startsWith2.apply(“A”)得到Lambda表达式</p>
+<p>它作为参数被传入到了filter方法中：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="keyword">long</span> countStartsWithA3 =items.stream().filter(startsWith2.apply(<span class="string">"A"</span>)).count();</span><br><span class="line">  System.out.println(countStartsWithA3);</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2029/11/18/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%AD%A6%E4%B9%A0/" data-id="ck7wsq1gp0000apwd20occxha"
+         class="article-share-link">Share</a>
+      
+    </footer>
+
+  </div>
+
+  
+    
+  <nav class="article-nav">
+    
+    
+      <a href="/2020/02/22/%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2%E5%AF%86%E7%A0%81%E5%AD%A6Wp/" class="article-nav-link">
+        <strong class="article-nav-caption">Older</strong>
+        <div class="article-nav-title">巅峰极客密码学Wp</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+    
+  
+
+</article>
+
+
+
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2020 Ayrain&#39;s blog</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean" target="_blank" rel="noopener">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="Ayrain&#39;s blog"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">Home</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">Archives</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">Gallery</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">About</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        Search
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+  
+<script src="/js/tocbot.min.js"></script>
+
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+
+<script src="/js/ocean.js"></script>
+
+
+</body>
+</html>
