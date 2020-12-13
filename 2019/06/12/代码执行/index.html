@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>
-    Archives: 2019 |
+    代码执行和命令执行的一些利用方法 |
     
     Ayrain&#39;s blog</title>
   
@@ -31,134 +31,106 @@
 <body>
 <main class="content">
   <section class="outer">
-    <article class="articles">
-      
-      <h1 class="page-type-title">2019</h1>
-      
-      
-      
+  
+
+<article id="post-代码执行" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
         
-        
-          
-          
-      <div class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-          
-          <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2019/12/22/%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2%E5%AF%86%E7%A0%81%E5%AD%A6Wp/" class="archive-article-date">
-  <time datetime="2019-12-22T09:22:04.000Z" itemprop="datePublished">12/22</time>
+  
+    <h1 class="article-title" itemprop="name">
+      代码执行和命令执行的一些利用方法
+    </h1>
+  
+  
+
+
+
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/06/12/%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C/" class="article-date">
+  <time datetime="2019-06-12T05:22:04.000Z" itemprop="datePublished">2019-06-12</time>
 </a>
-      
-  
-    <h2 itemprop="name">
-      <a class="archive-article-title" href="/2019/12/22/%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2%E5%AF%86%E7%A0%81%E5%AD%A6Wp/">巅峰极客密码学Wp</a>
-    </h2>
-  
-  
-
-
-
-
-    </header>
-    
-    
-  </div>
-</article>
-          
         
-        
-          <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2019/11/19/%E7%BA%BF%E4%B8%8B%E5%87%86%E5%A4%87/" class="archive-article-date">
-  <time datetime="2019-11-19T09:25:50.000Z" itemprop="datePublished">11/19</time>
-</a>
-      
-  
-    <h2 itemprop="name">
-      <a class="archive-article-title" href="/2019/11/19/%E7%BA%BF%E4%B8%8B%E5%87%86%E5%A4%87/">线下准备</a>
-    </h2>
-  
-  
-
-
-
-
-    </header>
-    
-    
-  </div>
-</article>
-          
-        
-        
-          <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2019/11/18/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%AD%A6%E4%B9%A0/" class="archive-article-date">
-  <time datetime="2019-11-18T03:52:27.000Z" itemprop="datePublished">11/18</time>
-</a>
-      
-  
-    <h2 itemprop="name">
-      <a class="archive-article-title" href="/2019/11/18/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%AD%A6%E4%B9%A0/">lambda表达式学习</a>
-    </h2>
-  
-  
-
-
-
-
-    </header>
-    
-    
-  </div>
-</article>
-          
-        
-        
-          <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2019/06/12/%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C/" class="archive-article-date">
-  <time datetime="2019-06-12T05:22:04.000Z" itemprop="datePublished">06/12</time>
-</a>
-      
-  
-    <h2 itemprop="name">
-      <a class="archive-article-title" href="/2019/06/12/%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C/">代码执行和命令执行的一些利用方法</a>
-    </h2>
-  
-  
-
-
-
-
-    </header>
-    
-    
-  </div>
-</article>
-          
-          
-        </div>
       </div>
-      
     
+
+    
+      
+
+
+
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+        <p>代码执行+命令执行的一些利用方法，以及代码执行与命令执行的关系</p>
+<a id="more"></a>
+<p>学习完一类知识，可以通过流程图梳理一遍所学知识的关系，不仅能加深理解，日后复习也能快速回忆。<br><img src="/Users/ayrain/myblog/Ayrain0.github.io/public/images/article/%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E5%92%8C%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C.jpg" alt="代码执行"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/06/12/%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C/" data-id="ckimv8fz00000fjwda4jp2o66"
+         class="article-share-link">Share</a>
+      
+    </footer>
+
+  </div>
+
   
     
-  </section>
+  <nav class="article-nav">
+    
+      <a href="/2019/11/18/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%AD%A6%E4%B9%A0/" class="article-nav-link">
+        <strong class="article-nav-caption">Newer</strong>
+        <div class="article-nav-title">
+          
+            lambda表达式学习
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2018/12/29/%E6%96%B0%E8%8A%BD%E9%9D%A2%E8%AF%95%E7%AC%94%E8%AE%B0/" class="article-nav-link">
+        <strong class="article-nav-caption">Older</strong>
+        <div class="article-nav-title">面试三叶草笔记</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+    
+  
+
+</article>
+
+
+
+</section>
   <footer class="footer">
   <div class="outer">
     <div class="float-right">
       <ul class="list-inline">
   
     <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
   
 </ul>
     </div>
@@ -246,6 +218,23 @@
 
 
 
+
+  
+<script src="/js/tocbot.min.js"></script>
+
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
 
 
 
